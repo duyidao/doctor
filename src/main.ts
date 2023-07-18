@@ -1,6 +1,9 @@
 // Vue3提供createApp方法，用于创建应用实例
 import { createApp } from 'vue'
 
+// 引入vue-router
+import router from '@/router'
+
 // 引入清除默认样式
 import './style/reset.scss'
 
@@ -17,6 +20,9 @@ const app = createApp(App)
 // 全局注册
 app.component('HospitalTop', HospitalTop)
 app.component('HospitalBottom', HospitalBottom)
+
+// 使用路由
+app.use(router)
 
 // 挂载
 app.mount('#app')

@@ -5,7 +5,7 @@
   <div class="container">
     <HospitalTop />
     <div class="content">
-      xxx
+      <router-view></router-view>
     </div>
     <div class="bottom">
       <HospitalBottom />
@@ -30,6 +30,7 @@
   .bottom {
     width: 100%;
     height: 50px;
+    background-color: #edf6ff;
   }
 }
 </style>

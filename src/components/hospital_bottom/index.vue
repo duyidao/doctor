@@ -35,7 +35,7 @@
       span {
         margin: 0 10px;
         font-size: 14px;
-        color: #999;
+        color: #555;
       }
     }
   }
