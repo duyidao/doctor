@@ -4,6 +4,10 @@ import { createApp } from 'vue'
 // 引入vue-router
 import router from '@/router'
 
+// 引入element-plus组件库
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
 // 引入清除默认样式
 import './style/reset.scss'
 
@@ -21,8 +25,9 @@ const app = createApp(App)
 app.component('HospitalTop', HospitalTop)
 app.component('HospitalBottom', HospitalBottom)
 
-// 使用路由
+// 安装
 app.use(router)
+app.use(ElementPlus)
 
 // 挂载
 app.mount('#app')
