@@ -22,14 +22,14 @@
 
   .content {
     width: 1200px;
+    min-height: calc(100vh - 130px);
     margin-top: 75px;
     background-color: rebeccapurple;
   }
 
   .bottom {
     width: 100%;
-    height: 100px;
-    background-color: royalblue;
+    height: 50px;
   }
 }
 </style>
