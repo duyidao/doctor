@@ -10,5 +10,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
       '@comp': path.resolve(__dirname, 'src/components')
     }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://syt.atguigu.cn',
+        changeOrigin: true
+      }
+    }
   }
 })

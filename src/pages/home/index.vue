@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getBanner } from '@/apis'
 // 引入轮播图组件
 import HomeCarousel from "./carousel/index.vue";
 // 引入搜索组件
@@ -21,6 +22,13 @@ const handleCurrentChange = (e: number) => {
 const handleSizeChange = (e: number) => {
   console.log(e);
 };
+
+const getFn = async () => {
+  const res = await getBanner(1, 10)
+  console.log(res);
+  
+}
+onMounted(() => getFn())
 </script>
 
 <template>
