@@ -7,16 +7,16 @@ export default createRouter({
   // 路由数组
   routes: [
     {
-      path: '/home',
+      path: '/doctor/home',
       component: () => import('@/pages/home/index.vue')
     },
     {
-      path: '/hospital',
+      path: '/doctor/hospital',
       component: () => import('@/pages/hospital/index.vue')
     },
     {
-      path: '/',
-      redirect: '/home',
+      path: '/doctor',
+      redirect: '/doctor/home',
     },
   ],
   // 控制滚动行为
