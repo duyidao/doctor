@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 // 引入图标
 import { Search } from "@element-plus/icons-vue";
 </script>

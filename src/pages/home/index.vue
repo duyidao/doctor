@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getBanner } from '@/apis'
+import { getHospitalApi } from '@/apis/home/index.ts'
+import type { Content, HospitalResponseType } from '@/apis/home/type.ts'
 // 引入轮播图组件
 import HomeCarousel from "./carousel/index.vue";
 // 引入搜索组件
@@ -12,23 +13,29 @@ import HomeRegion from "./region/index.vue";
 // 引入医院组件
 import HomeCard from "./card/index.vue";
 
-const currentPage = ref(1);
-const pageSize = ref(10);
-const total = ref(100);
+const currentPage = ref<number>(1);
+const pageSize = ref<number>(10);
+const total = ref<number>(0);
+const hospitalList = ref<Content[]>([])
+// 获取医院列表数据
+const getHospitalFn = async () => {
+  const res: HospitalResponseType = await getHospitalApi(currentPage.value, pageSize.value)
+  if(res.code === 200) {
+    hospitalList.value = res.data.content
+    total.value = res.data.totalElements
+  }
+}
+onMounted(() => getHospitalFn())
 
+// 分页器修改分页
 const handleCurrentChange = (e: number) => {
-  console.log(e);
+  currentPage.value = e
+  getHospitalFn()
 };
 const handleSizeChange = (e: number) => {
-  console.log(e);
+  pageSize.value = e
+  getHospitalFn()
 };
-
-const getFn = async () => {
-  const res = await getBanner(1, 10)
-  console.log(res);
-  
-}
-onMounted(() => getFn())
 </script>
 
 <template>
@@ -48,7 +55,7 @@ onMounted(() => getFn())
         <HomeRegion />
         <!-- 医院 -->
         <div class="card">
-          <HomeCard v-for="item in 10" :key="item" class="item" />
+          <HomeCard v-for="item in hospitalList" :key="item.id" :item="item" class="item" />
         </div>
         <el-pagination
           v-model:current-page="currentPage"
