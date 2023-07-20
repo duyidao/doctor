@@ -6,6 +6,8 @@ import router from '@/router'
 
 // 引入element-plus组件库
 import ElementPlus from 'element-plus'
+// @ts-ignore
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import 'element-plus/dist/index.css'
 
 // 引入清除默认样式
@@ -28,6 +30,9 @@ app.component('HospitalBottom', HospitalBottom)
 // 安装
 app.use(router)
 app.use(ElementPlus)
+app.use(ElementPlus, {
+  locale: zhCn,
+})
 
 // 挂载
 app.mount('#app')
