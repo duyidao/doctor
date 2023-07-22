@@ -1,4 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { getHospitalDictCodeApi } from '@/apis/home/index.ts'
+import type { DictCodeResponseType, DictCodeType } from '@/apis/home/type.ts'
+
+const hospitalLevelArr = ref<DictCodeType[]>([])
+// 获取医院等级
+const getHospitalDictCodeFn = async () => {
+  const res: DictCodeResponseType = await getHospitalDictCodeApi('HosType')
+  if(res.code === 200) {
+    hospitalLevelArr.value = res.data
+  }
+}
+onMounted(() => getHospitalDictCodeFn())
+
+// 点击改变医院等级
+const levelActive = ref('')
+const changeLevelFn = (e: string = '') => {
+  levelActive.value = e
+}
+</script>
 
 <template>
   <div class="level">
@@ -6,12 +26,8 @@
     <div class="content">
       <div class="left">等级：</div>
       <ul>
-        <li class="active">全部</li>
-        <li>三级甲等</li>
-        <li>三级乙等</li>
-        <li>三级丙等</li>
-        <li>二级甲等</li>
-        <li>二级乙等</li>
+        <li :class="{'active': levelActive === ''}">全部</li>
+        <li :class="{'active': levelActive === item.value}" v-for="item in hospitalLevelArr" :key="item.value" @click="changeLevelFn(item.value)">{{ item.name }}</li>
       </ul>
     </div>
   </div>

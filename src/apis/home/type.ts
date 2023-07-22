@@ -75,3 +75,21 @@ export interface HospitalResponseType extends responseType {
     empty: boolean;
   }
 }
+
+
+// 获取医院等级或地区接口类型
+export interface DictCodeType {
+    id: number
+    createTime: string
+    updateTime: string
+    isDeleted: number
+    param: Param
+    parentId: number
+    name: string
+    value: string
+    dictCode: string
+    hasChildren: boolean
+}
+export interface DictCodeResponseType extends responseType {
+  data: DictCodeType[]
+}

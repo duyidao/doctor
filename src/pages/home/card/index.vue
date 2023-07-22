@@ -1,24 +1,8 @@
 <script setup lang="ts">
+import type { Content } from '@/apis/home/type.ts'
+
 defineProps<{
-  item: {
-    id: string;
-    createTime: string;
-    updateTime: string;
-    isDeleted: number;
-    param: any;
-    hoscode: string;
-    hosname: string;
-    hostype: string;
-    provinceCode: string;
-    cityCode: string;
-    districtCode: string;
-    address: string;
-    logoData: string;
-    intro?: any;
-    route: string;
-    status: number;
-    bookingRule: any;
-  };
+  item: Content
 }>();
 </script>
 

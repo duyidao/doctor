@@ -1,26 +1,31 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { getHospitalDictCodeApi } from '@/apis/home/index.ts'
+import type { DictCodeResponseType, DictCodeType } from '@/apis/home/type.ts'
 
+const hospitalRegionArr = ref<DictCodeType[]>([])
+// 获取医院地区
+const getHospitalDictCodeFn = async () => {
+  const res: DictCodeResponseType = await getHospitalDictCodeApi('Beijin')
+  if(res.code === 200) {
+    hospitalRegionArr.value = res.data
+  }
+}
+onMounted(() => getHospitalDictCodeFn())
+
+// 点击改变医院地区
+const regionActive = ref('')
+const changeRegionFn = (e: string = '') => {
+  regionActive.value = e
+}
 </script>
 
 <template>
   <div class="region">
     <div class="left">地区：</div>
     <ul>
-      <li class="active">全部</li>
-      <li>天河区</li>
-      <li>黄埔区</li>
-      <li>增城区</li>
-      <li>越秀区</li>
-      <li>花都区</li>
-      <li>荔湾区</li>
-      <li>白云区</li>
-      <li>南昌区</li>
-      <li>嘀嘀嘀</li>
-      <li>嘀嘀4嘀</li>
-      <li>嘀嘀2嘀</li>
-      <li>嘀嘀嘀1</li>
-      <li>嘀r嘀嘀</li>
-      <li>嘀g嘀嘀</li>
+      <li :class="{'active': regionActive === ''}">全部</li>
+      <li :class="{'active': regionActive === item.value}" v-for="item in hospitalRegionArr" :key="item.value" @click="changeRegionFn(item.value)">{{ item.name }}</li>
     </ul>
   </div>
 </template>
