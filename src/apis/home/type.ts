@@ -93,3 +93,39 @@ export interface DictCodeType {
 export interface DictCodeResponseType extends responseType {
   data: DictCodeType[]
 }
+
+
+// 根据名称获取医院数据类型
+export interface HospiatlByNameParam {}
+
+export interface BookingRule {
+  cycle: number
+  releaseTime: string
+  stopTime: string
+  quitDay: number
+  quitTime: string
+  rule: string[]
+}
+export interface HospiatlByNameType {
+  id: string
+  createTime: string
+  updateTime: string
+  isDeleted: number
+  param: HospiatlByNameParam
+  hoscode: string
+  hosname: string
+  hostype: string
+  provinceCode: string
+  cityCode: string
+  districtCode: string
+  address: string
+  logoData: string
+  intro: string
+  route: string
+  status: number
+  bookingRule: BookingRule
+}
+
+export interface HospitalByNameResponseType extends responseType {
+  data: HospiatlByNameType[]
+}

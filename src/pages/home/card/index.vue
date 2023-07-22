@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import type { Content } from '@/apis/home/type.ts'
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 defineProps<{
   item: Content
 }>();
+
+// 点击去往医院详情页
+const handleDetailFn = () => {
+  router.push({
+    path: '/doctor/hospital'
+  })
+}
 </script>
 
 <template>
-  <el-card shadow="hover">
+  <el-card shadow="hover" @click="handleDetailFn">
     <div class="content">
       <div class="left">
         <div class="hospital_name">{{ item.hosname }}</div>

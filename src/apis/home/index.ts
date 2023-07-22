@@ -1,11 +1,17 @@
 // 首页模块
 // @ts-ignore
 import http from '@/request'
-import type { HospitalResponseType, DictCodeResponseType } from './type'
+import type { HospitalResponseType, DictCodeResponseType, HospitalByNameResponseType } from './type'
 
 enum API {
   HOSPITAL_URL = '/hosp/hospital/', // 获取已有医院数据列表
   HOSPITALLEVELORPLACE_URL = '/cmn/dict/findByDictCode/', // 获取医院等级或地区
+  HOSPITALINFO_URL = '/hosp/hospital/findByHosname/', // 根据医院名称获取医院数据
+}
+
+// 根据医院名称获取医院数据
+export const getHospitalInfoApi = (hosname: string) => {
+  return http.get<any, HospitalByNameResponseType>(API.HOSPITALINFO_URL + `${hosname}`)
 }
 
 // 获取医院等级或地区

@@ -1,10 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+const router = useRouter()
+
+// 点击logo跳转首页
+const handleHomeFn = () => {
+  router.replace({
+    path: '/doctor/home'
+  })
+}
+</script>
 
 <template>
   <div class="top">
     <div class="content">
       <!-- 左侧 -->
-      <div class="left">
+      <div class="left" @click="handleHomeFn">
         <img src="../../assets//images//logo.png" alt="" />
         <p>刀刀医院 预约挂号</p>
       </div>
@@ -41,6 +52,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
 
       img {
         width: 50px;
