@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
+import { onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import {
   Document,
   ChatDotSquare,
   House,
   Bell,
   MessageBox,
-  Search
-} from '@element-plus/icons-vue'
+  Search,
+} from "@element-plus/icons-vue";
+import useDetailStore from "@/store/modules/hospitalDetail";
+const { getHospDetailFn } = useDetailStore();
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 // 点击前往首页按钮
 const handleHomeFn = () => {
   router.push({
-    path: '/doctor/home'
-  })
-}
+    path: "/doctor/home",
+  });
+};
+
+// 组件挂载完毕，调用pinia仓库内的函数调用接口获取数据
+onMounted(() => getHospDetailFn(route.query.code));
 </script>
 
 <template>
@@ -91,6 +97,8 @@ const handleHomeFn = () => {
 
   .content {
     flex: 8;
+    padding: 30px;
+    box-sizing: border-box;
   }
 }
 </style>

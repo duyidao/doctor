@@ -4,14 +4,17 @@ import { useRouter } from "vue-router";
 
 const router = useRouter()
 
-defineProps<{
+const { item } = defineProps<{
   item: Content
 }>();
 
 // 点击去往医院详情页
 const handleDetailFn = () => {
   router.push({
-    path: '/doctor/hospital'
+    path: '/doctor/hospital',
+    query: {
+      code: item.hoscode
+    }
   })
 }
 </script>

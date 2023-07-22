@@ -3,6 +3,8 @@ import { createApp } from 'vue'
 
 // 引入vue-router
 import router from '@/router'
+// 引入pinia
+import pinia from '@/store'
 
 // 引入element-plus组件库
 import ElementPlus from 'element-plus'
@@ -29,6 +31,7 @@ app.component('HospitalBottom', HospitalBottom)
 
 // 安装
 app.use(router)
+app.use(pinia)
 app.use(ElementPlus, {
   locale: zhCn,
 })

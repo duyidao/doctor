@@ -23,11 +23,14 @@ const fetchFn = async (e: string, callback: any) => {
 }
 
 // 选择要搜索的详情
-const handleSearchFn = (e: any) => {
+const handleSearchFn = (e: HospiatlByNameType) => {
   console.log(e);
   // 进入医院详情
   router.push({
-    path: '/doctor/hospital'
+    path: '/doctor/hospital',
+    query: {
+      code: e.hoscode
+    }
   })
 }
 
