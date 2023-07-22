@@ -14,6 +14,6 @@ export const getHospitalDictCodeApi = (dictCode: string) => {
 }
 
 // 获取已有医院数据列表
-export const getHospitalApi = (page: number, limit: number, params?: any) => {
-  return http.get<any, HospitalResponseType>(API.HOSPITAL_URL + `${page}/${limit}`, {params})
+export const getHospitalApi = (page: number, limit: number, hostype: string = '', districtCode: string = '') => {
+  return http.get<any, HospitalResponseType>(API.HOSPITAL_URL + `${page}/${limit}?hostype=${hostype}&districtCode=${districtCode}`)
 }

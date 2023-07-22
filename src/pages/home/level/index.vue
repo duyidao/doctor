@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue";
 import { getHospitalDictCodeApi } from '@/apis/home/index.ts'
 import type { DictCodeResponseType, DictCodeType } from '@/apis/home/type.ts'
 
+// 子组件自定义事件
+const emit = defineEmits(['changeDictCodeFn'])
+
 const hospitalLevelArr = ref<DictCodeType[]>([])
 // 获取医院等级
 const getHospitalDictCodeFn = async () => {
@@ -17,6 +20,7 @@ onMounted(() => getHospitalDictCodeFn())
 const levelActive = ref('')
 const changeLevelFn = (e: string = '') => {
   levelActive.value = e
+  emit('changeDictCodeFn', levelActive.value)
 }
 </script>
 
@@ -26,7 +30,7 @@ const changeLevelFn = (e: string = '') => {
     <div class="content">
       <div class="left">等级：</div>
       <ul>
-        <li :class="{'active': levelActive === ''}">全部</li>
+        <li :class="{'active': levelActive === ''}" @click="changeLevelFn('')">全部</li>
         <li :class="{'active': levelActive === item.value}" v-for="item in hospitalLevelArr" :key="item.value" @click="changeLevelFn(item.value)">{{ item.name }}</li>
       </ul>
     </div>

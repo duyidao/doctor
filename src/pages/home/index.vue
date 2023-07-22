@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getHospitalApi } from '@/apis/home/index.ts'
-import type { Content, HospitalResponseType } from '@/apis/home/type.ts'
+import { getHospitalApi } from "@/apis/home/index.ts";
+import type { Content, HospitalResponseType } from "@/apis/home/type.ts";
 // 引入轮播图组件
 import HomeCarousel from "./carousel/index.vue";
 // 引入搜索组件
@@ -13,28 +13,45 @@ import HomeRegion from "./region/index.vue";
 // 引入医院组件
 import HomeCard from "./card/index.vue";
 
+const loading = ref<boolean>(true)
 const currentPage = ref<number>(1);
 const pageSize = ref<number>(10);
 const total = ref<number>(0);
-const hospitalList = ref<Content[]>([])
+const hospitalList = ref<Content[]>([]);
+const hostype = ref<string>(""); // 医院等级
+const districtCode = ref<string>(""); // 医院地区
+
 // 获取医院列表数据
 const getHospitalFn = async () => {
-  const res: HospitalResponseType = await getHospitalApi(currentPage.value, pageSize.value)
-  if(res.code === 200) {
-    hospitalList.value = res.data.content
-    total.value = res.data.totalElements
+  loading.value = true
+  const res: HospitalResponseType = await getHospitalApi(
+    currentPage.value,
+    pageSize.value,
+    hostype.value,
+    districtCode.value
+  );
+  if (res.code === 200) {
+    hospitalList.value = res.data.content;
+    total.value = res.data.totalElements;
+    loading.value = false
   }
-}
-onMounted(() => getHospitalFn())
+};
+onMounted(() => getHospitalFn());
+
+// 子组件切换完毕通知父组件修改
+const changeDictCodeFn = (type: string, e: string) => {
+  type === "level" ? (hostype.value = e) : (districtCode.value = e);
+  getHospitalFn();
+};
 
 // 分页器修改分页
 const handleCurrentChange = (e: number) => {
-  currentPage.value = e
-  getHospitalFn()
+  currentPage.value = e;
+  getHospitalFn();
 };
 const handleSizeChange = (e: number) => {
-  pageSize.value = e
-  getHospitalFn()
+  pageSize.value = e;
+  getHospitalFn();
 };
 </script>
 
@@ -50,24 +67,31 @@ const handleSizeChange = (e: number) => {
     <el-row>
       <el-col :span="20">
         <!-- 等级 -->
-        <HomeLevel />
+        <HomeLevel @changeDictCodeFn="(e) => changeDictCodeFn('level', e)" />
         <!-- 地区 -->
-        <HomeRegion />
+        <HomeRegion @changeDictCodeFn="(e) => changeDictCodeFn('region', e)" />
         <!-- 医院 -->
-        <div class="card">
-          <HomeCard v-for="item in hospitalList" :key="item.id" :item="item" class="item" />
-        </div>
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 30, 40]"
-          :background="true"
-          layout="prev, pager, next, jumper, ->, total, sizes"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-        
+        <template v-if="hospitalList.length > 0">
+          <div class="card"  v-loading="loading">
+            <HomeCard
+              v-for="item in hospitalList"
+              :key="item.id"
+              :item="item"
+              class="item"
+            />
+          </div>
+          <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[10, 20, 30, 40]"
+            :background="true"
+            layout="prev, pager, next, jumper, ->, total, sizes"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </template>
+        <el-empty v-else description="暂无医院信息" />
       </el-col>
       <el-col :span="4"> </el-col>
     </el-row>

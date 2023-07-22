@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue";
 import { getHospitalDictCodeApi } from '@/apis/home/index.ts'
 import type { DictCodeResponseType, DictCodeType } from '@/apis/home/type.ts'
 
+// 子组件自定义事件
+const emit = defineEmits(['changeDictCodeFn'])
+
 const hospitalRegionArr = ref<DictCodeType[]>([])
 // 获取医院地区
 const getHospitalDictCodeFn = async () => {
@@ -17,6 +20,7 @@ onMounted(() => getHospitalDictCodeFn())
 const regionActive = ref('')
 const changeRegionFn = (e: string = '') => {
   regionActive.value = e
+  emit('changeDictCodeFn', regionActive.value)
 }
 </script>
 
@@ -24,7 +28,7 @@ const changeRegionFn = (e: string = '') => {
   <div class="region">
     <div class="left">地区：</div>
     <ul>
-      <li :class="{'active': regionActive === ''}">全部</li>
+      <li :class="{'active': regionActive === ''}" @click="changeRegionFn('')">全部</li>
       <li :class="{'active': regionActive === item.value}" v-for="item in hospitalRegionArr" :key="item.value" @click="changeRegionFn(item.value)">{{ item.name }}</li>
     </ul>
   </div>
