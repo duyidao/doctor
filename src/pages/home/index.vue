@@ -12,8 +12,9 @@ import HomeLevel from "./level/index.vue";
 import HomeRegion from "./region/index.vue";
 // 引入医院组件
 import HomeCard from "./card/index.vue";
+import HomeTip from "./tip/index.vue";
 
-const loading = ref<boolean>(true)
+const loading = ref<boolean>(true);
 const currentPage = ref<number>(1);
 const pageSize = ref<number>(10);
 const total = ref<number>(0);
@@ -23,7 +24,7 @@ const districtCode = ref<string>(""); // 医院地区
 
 // 获取医院列表数据
 const getHospitalFn = async () => {
-  loading.value = true
+  loading.value = true;
   const res: HospitalResponseType = await getHospitalApi(
     currentPage.value,
     pageSize.value,
@@ -33,7 +34,7 @@ const getHospitalFn = async () => {
   if (res.code === 200) {
     hospitalList.value = res.data.content;
     total.value = res.data.totalElements;
-    loading.value = false
+    loading.value = false;
   }
 };
 onMounted(() => getHospitalFn());
@@ -72,7 +73,7 @@ const handleSizeChange = (e: number) => {
         <HomeRegion @changeDictCodeFn="(e) => changeDictCodeFn('region', e)" />
         <!-- 医院 -->
         <template v-if="hospitalList.length > 0">
-          <div class="card"  v-loading="loading">
+          <div class="card" v-loading="loading">
             <HomeCard
               v-for="item in hospitalList"
               :key="item.id"
@@ -93,7 +94,9 @@ const handleSizeChange = (e: number) => {
         </template>
         <el-empty v-else description="暂无医院信息" />
       </el-col>
-      <el-col :span="4"> </el-col>
+      <el-col :span="4">
+        <HomeTip />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -103,6 +106,7 @@ const handleSizeChange = (e: number) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  padding: 0 30px 0 0;
 
   .item {
     width: 48%;
