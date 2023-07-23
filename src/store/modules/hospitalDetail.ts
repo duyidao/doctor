@@ -18,6 +18,8 @@ const useDetailStore = defineStore('detail', () => {
     hospitalInfo,
     getHospDetailFn
   }
+}, {
+  persist: true
 })
 
 export default useDetailStore

@@ -34,27 +34,37 @@ onMounted(() => getHospDetailFn(route.query.code));
         <span>首页</span>
       </div>
       <el-menu
-        :default-active="route.path"
+        :default-active="route.path + `?code=${route.query.code}`"
         router
         class="el-menu-vertical-demo"
       >
-        <el-menu-item index="/doctor/hospital/register">
+        <el-menu-item
+          :index="`/doctor/hospital/register?code=${route.query.code}`"
+        >
           <el-icon><ChatDotSquare /></el-icon>
           <span>预约挂号</span>
         </el-menu-item>
-        <el-menu-item index="/doctor/hospital/detail">
+        <el-menu-item
+          :index="`/doctor/hospital/detail?code=${route.query.code}`"
+        >
           <el-icon><document /></el-icon>
           <span>医院详情</span>
         </el-menu-item>
-        <el-menu-item index="/doctor/hospital/notice">
+        <el-menu-item
+          :index="`/doctor/hospital/notice?code=${route.query.code}`"
+        >
           <el-icon><Bell /></el-icon>
           <span>预约通知</span>
         </el-menu-item>
-        <el-menu-item index="/doctor/hospital/close">
+        <el-menu-item
+          :index="`/doctor/hospital/close?code=${route.query.code}`"
+        >
           <el-icon><MessageBox /></el-icon>
           <span>停诊信息</span>
         </el-menu-item>
-        <el-menu-item index="/doctor/hospital/search">
+        <el-menu-item
+          :index="`/doctor/hospital/search?code=${route.query.code}`"
+        >
           <el-icon><Search /></el-icon>
           <span>查询/取消</span>
         </el-menu-item>

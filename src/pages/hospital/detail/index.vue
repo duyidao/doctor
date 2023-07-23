@@ -46,7 +46,7 @@ const { hospitalInfo } = storeToRefs(useDetailStore());
     </div>
   </div>
   <div class="info">
-    医院介绍：{{ hospitalInfo.hospital.intro }}
+    医院介绍：{{ hospitalInfo.hospital.intro || "暂无医院介绍"  }}
   </div>
 </template>
 

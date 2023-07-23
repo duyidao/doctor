@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import router from '@/router'
 // 引入pinia
 import pinia from '@/store'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 // 引入element-plus组件库
 import ElementPlus from 'element-plus'
@@ -35,6 +36,8 @@ app.use(pinia)
 app.use(ElementPlus, {
   locale: zhCn,
 })
+
+pinia.use(piniaPluginPersistedstate)
 
 // 挂载
 app.mount('#app')
