@@ -10,7 +10,7 @@ import {
   Search,
 } from "@element-plus/icons-vue";
 import useDetailStore from "@/store/modules/hospitalDetail";
-const { getHospDetailFn } = useDetailStore();
+const { getHospDetailFn, getHospDepartmentFn } = useDetailStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -22,7 +22,10 @@ const handleHomeFn = () => {
 };
 
 // 组件挂载完毕，调用pinia仓库内的函数调用接口获取数据
-onMounted(() => getHospDetailFn(route.query.code));
+onMounted(() => {
+  getHospDetailFn(route.query.code)
+  getHospDepartmentFn(route.query.code)
+});
 </script>
 
 <template>

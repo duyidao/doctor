@@ -1,7 +1,22 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import useDetailStore from "@/store/modules/hospitalDetail";
 import { storeToRefs } from 'pinia'
-const { hospitalInfo } = storeToRefs(useDetailStore());
+const { hospitalInfo, hospitalDepartmentData } = storeToRefs(useDetailStore());
+
+const activeIndex = ref<number>(0)
+
+// 点击科室左侧导航
+const handleNavFn = (i: number) => {
+  activeIndex.value = i
+  // 获取右侧科室h1标题
+  let allH1 = document.querySelectorAll('h1')
+  // 滚动到对应位置
+  allH1[i].scrollIntoView({
+    behavior: 'smooth', // 过度动画效果
+    block: 'end'
+  })
+}
 </script>
 
 <template>
@@ -51,6 +66,24 @@ const { hospitalInfo } = storeToRefs(useDetailStore());
         <div class="rule">预约挂号规则</div>
         <div v-for="(item, index) in hospitalInfo.bookingRule.rule" :key="index">
           {{ item }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 科室 -->
+    <div class="department">
+      <div class="leftNav">
+        <ul>
+          <li :class="{'active': index === activeIndex}" v-for="(item, index) in hospitalDepartmentData" :key="item.depcode" @click="handleNavFn(index, item)">{{ item.depname }}</li>
+        </ul>
+      </div>
+      <div class="rightInfo">
+        <div class="showDepartment" v-for="item in hospitalDepartmentData" :key="item.depcode">
+          <h1>{{ item.depname }}</h1>
+          <!-- 小科室 -->
+          <ul>
+            <li v-for="depart in item.children" :key="depart.depcode">{{ depart.depname }}</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -105,6 +138,75 @@ const { hospitalInfo } = storeToRefs(useDetailStore());
 
       .rule {
         margin-top: 15px;
+      }
+    }
+  }
+
+  .department {
+    display: flex;
+    width: 100%;
+    height: 500px;
+    margin-top: 30px;
+
+    .leftNav {
+      width: 100px;
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        background-color: #f1f1f1;
+
+        li {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #7f7f7f;
+          font-size: 14px;
+          border-left: 1px solid transparent;
+          cursor: pointer;
+
+          &.active {
+            background-color: #fff;
+            border-left: 1px solid #ff5d5d;
+            color: #ff5d5d;
+          }
+        }
+      }
+    }
+
+    .rightInfo {
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+      margin-left: 20px;
+      color: #555;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .showDepartment {
+        margin-bottom: 20px;
+        h1 {
+          height: 50px;
+          line-height: 50px;
+          background-color: #f1f1f1;
+          margin-bottom: 20px;
+        }
+
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+
+          li {
+            width: 33%;
+            margin-bottom: 20px;
+            padding-right: 10px;
+          }
+        }
       }
     }
   }

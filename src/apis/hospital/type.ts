@@ -46,3 +46,20 @@ export interface Param {
   hostypeString: string
   fullAddress: string
 }
+
+
+// 科室接口返回类型
+export interface HospitalDepartmentResponseType extends responseType {
+  data: HospitalDepartmentItemType[]
+}
+export interface HospitalDepartmentItemType {
+  depcode: string
+  depname: string
+  children?: Children[]
+}
+
+export interface Children {
+  depcode: string
+  depname: string
+  children: any
+}
