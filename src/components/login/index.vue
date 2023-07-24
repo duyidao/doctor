@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 import CountDown from '../count_down/index.vue'
 
 const { dialogVisible } = storeToRefs(useUserStore());
-const { getCodeFn } = useUserStore();
+const { getCodeFn, loginFn } = useUserStore();
 
 // 控制显示账号密码还是扫码：0账号密码；1微信扫码
 const scene = ref<number>(0);
@@ -48,7 +48,13 @@ const timeOverFn = () => {
 }
 
 // 点击登录按钮
-const onLogin = () => {}
+const onLogin = () => {
+  loginFn(loginParams.value).then((res: any) => {
+    dialogVisible.value = false
+  }).catch((err: any) => {
+    ElMessage.error(err)
+  })
+}
 </script>
 
 <template>

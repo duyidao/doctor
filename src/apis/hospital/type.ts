@@ -69,3 +69,17 @@ export interface Children {
 export interface GetCodeResponseType extends responseType {
   data: string
 }
+
+
+// 登录接口参数类型
+export interface userLoginDataType {
+  phone: string, code: string
+}
+// 登录接口类型
+export interface LoginResponseType extends responseType {
+  data: LoginType
+}
+export interface LoginType {
+	name?: string;
+	token?: string;
+}

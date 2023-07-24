@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { getUserCodeApi } from '@/apis/hospital/index.ts'
-import type { GetCodeResponseType } from '@/apis/hospital/type.ts'
+import { getUserCodeApi, loginApi } from '@/apis/hospital/index.ts'
+import type { GetCodeResponseType, userLoginDataType, LoginResponseType, LoginType } from '@/apis/hospital/type.ts'
 
 const useUserStore = defineStore('user', () => {
   const dialogVisible = ref<boolean>(false) // 登录弹窗是否显示
@@ -13,9 +13,23 @@ const useUserStore = defineStore('user', () => {
     else return Promise.reject(new Error(res.message))
   }
 
+  const userInfo = ref<LoginType>({})
+  // 登录
+  const loginFn = async (data: userLoginDataType) => {
+    const res: LoginResponseType = await loginApi(data)
+    if(res.code === 200) {
+      userInfo.value = res.data
+      return 'ok'
+    } else {
+      return Promise.reject(new Error(res.message))
+    }
+  }
+
   return {
     dialogVisible,
-    getCodeFn
+    userInfo,
+    getCodeFn,
+    loginFn
   }
 }, {
   persist: true

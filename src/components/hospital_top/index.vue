@@ -2,21 +2,22 @@
 import { useRouter } from "vue-router";
 import useUserStore from "@/store/modules/user";
 import { storeToRefs } from "pinia";
+import { ArrowDown } from '@element-plus/icons-vue'
 
-const { dialogVisible } = storeToRefs(useUserStore());
-const router = useRouter()
+const { dialogVisible, userInfo } = storeToRefs(useUserStore());
+const router = useRouter();
 
 // 点击logo跳转首页
 const handleHomeFn = () => {
   router.replace({
-    path: '/doctor/home'
-  })
-}
+    path: "/doctor/home",
+  });
+};
 
 // 点击登录注册按钮
 const handleLoginFn = () => {
-  dialogVisible.value = true
-}
+  dialogVisible.value = true;
+};
 </script>
 
 <template>
@@ -31,7 +32,25 @@ const handleLoginFn = () => {
       <!-- 右侧 -->
       <div class="right">
         <p class="help">帮助中心</p>
-        <p class="login" @click="handleLoginFn">登录/注册</p>
+        <p class="login" @click="handleLoginFn" v-if="!userInfo.name">
+          登录/注册
+        </p>
+        <el-dropdown v-else>
+          <p class="el-dropdown-link">
+            {{ userInfo.name }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
+          </p>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>实名认证</el-dropdown-item>
+              <el-dropdown-item>挂号订单</el-dropdown-item>
+              <el-dropdown-item>就诊人管理</el-dropdown-item>
+              <el-dropdown-item>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </div>
@@ -81,9 +100,12 @@ const handleLoginFn = () => {
 
       p {
         color: #888;
-        margin-left: 15px;
         font-size: 14px;
         cursor: pointer;
+
+        &:first-child {
+          margin-left: 15px;
+        }
       }
     }
   }
