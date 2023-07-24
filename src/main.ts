@@ -22,6 +22,7 @@ import App from './App.vue'
 // 引入头部与底部组件
 import HospitalTop from './components/hospital_top/index.vue'
 import HospitalBottom from './components/hospital_bottom/index.vue'
+import Login from './components/login/index.vue'
 
 // 利用createApp方法创建应用实例，并挂载到挂载点上
 const app = createApp(App)
@@ -29,6 +30,7 @@ const app = createApp(App)
 // 全局注册
 app.component('HospitalTop', HospitalTop)
 app.component('HospitalBottom', HospitalBottom)
+app.component('Login', Login)
 
 // 安装
 app.use(router)

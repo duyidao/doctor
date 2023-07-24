@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import useUserStore from "@/store/modules/user";
+import { storeToRefs } from "pinia";
 
+const { dialogVisible } = storeToRefs(useUserStore());
 const router = useRouter()
 
 // 点击logo跳转首页
@@ -8,6 +11,11 @@ const handleHomeFn = () => {
   router.replace({
     path: '/doctor/home'
   })
+}
+
+// 点击登录注册按钮
+const handleLoginFn = () => {
+  dialogVisible.value = true
 }
 </script>
 
@@ -23,7 +31,7 @@ const handleHomeFn = () => {
       <!-- 右侧 -->
       <div class="right">
         <p class="help">帮助中心</p>
-        <p class="login">登录/注册</p>
+        <p class="login" @click="handleLoginFn">登录/注册</p>
       </div>
     </div>
   </div>
@@ -75,6 +83,7 @@ const handleHomeFn = () => {
         color: #888;
         margin-left: 15px;
         font-size: 14px;
+        cursor: pointer;
       }
     }
   }

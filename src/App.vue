@@ -11,6 +11,9 @@
       <HospitalBottom />
     </div>
   </div>
+
+  <!-- 登录 -->
+  <Login />
 </template>
 
 <style lang="scss" scoped>

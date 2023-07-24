@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import useDetailStore from "@/store/modules/hospitalDetail";
 import { storeToRefs } from 'pinia'
+import useUserStore from "@/store/modules/user";
+
+const { dialogVisible } = storeToRefs(useUserStore());
 const { hospitalInfo, hospitalDepartmentData } = storeToRefs(useDetailStore());
 
 const activeIndex = ref<number>(0)
@@ -16,6 +19,10 @@ const handleNavFn = (i: number) => {
     behavior: 'smooth', // 过度动画效果
     block: 'end'
   })
+}
+
+const handleDepartFn = () => {
+  dialogVisible.value = true
 }
 </script>
 
@@ -82,7 +89,7 @@ const handleNavFn = (i: number) => {
           <h1>{{ item.depname }}</h1>
           <!-- 小科室 -->
           <ul>
-            <li v-for="depart in item.children" :key="depart.depcode">{{ depart.depname }}</li>
+            <li v-for="depart in item.children" :key="depart.depcode" @click="handleDepartFn">{{ depart.depname }}</li>
           </ul>
         </div>
       </div>
