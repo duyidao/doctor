@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { User, Lock } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import useUserStore from "@/store/modules/user";
 import { storeToRefs } from "pinia";
 
 const { dialogVisible } = storeToRefs(useUserStore());
+const { getCodeFn } = useUserStore();
 
 // 控制显示账号密码还是扫码：0账号密码；1微信扫码
 const scene = ref<number>(0);
@@ -13,6 +15,31 @@ const scene = ref<number>(0);
 const changeLoginType = (e: number) => {
   scene.value = e
 }
+
+/**
+ * 账号密码登录方式------------------------
+ */
+// 手机号验证码数据对象
+const loginParams = ref({
+  phone: '',
+  code: ''
+})
+// 手机号码校验是否通过
+let isPhone = computed(() => {
+  return (/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(loginParams.value.phone))
+})
+// 点击获取验证码按钮
+const handleGetCodeFn = async () => {
+  try {
+    const code = await getCodeFn(loginParams.value.phone)
+    loginParams.value.code = code
+  } catch (error) {
+    console.log(error);
+    ElMessage.error(error.message)
+  }
+}
+// 点击登录按钮
+const onLogin = () => {}
 </script>
 
 <template>
@@ -29,21 +56,23 @@ const changeLoginType = (e: number) => {
                   <el-form-item>
                     <el-input
                       :prefix-icon="User"
+                      v-model="loginParams.phone"
                       placeholder="请输入手机号码"
                     />
                   </el-form-item>
                   <el-form-item>
                     <el-input
                       :prefix-icon="Lock"
+                      v-model="loginParams.code"
                       placeholder="请输入手机验证码"
                     />
                   </el-form-item>
                   <el-form-item>
-                    <el-button>获取验证码</el-button>
+                    <el-button :disabled="!isPhone" @click="handleGetCodeFn">获取验证码</el-button>
                   </el-form-item>
                 </el-form>
                 <div class="bottom">
-                  <el-button type="primary" style="width: 90%" size="default"
+                  <el-button type="primary" style="width: 90%" size="default" @click="onLogin"
                     >用户登录</el-button
                   >
                   <p @click="changeLoginType(1)">微信扫码登录</p>

@@ -63,3 +63,9 @@ export interface Children {
   depname: string
   children: any
 }
+
+
+// 获取验证码接口类型
+export interface GetCodeResponseType extends responseType {
+  data: string
+}

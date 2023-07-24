@@ -1,11 +1,17 @@
 // @ts-ignore
 import http from '@/request'
 
-import type { HospitalDetailResponseType, HospitalDepartmentResponseType } from './type.ts'
+import type { HospitalDetailResponseType, HospitalDepartmentResponseType, GetCodeResponseType } from './type.ts'
 
 enum API {
   HOSPITALDETAIL_URL = '/hosp/hospital/', // 医院详情
   HOSPITALDEPARTMENT_URL = '/hosp/hospital/department/', // 获取医院科室
+  GETUSERCODE_URL = '/sms/send/', // 获取验证码
+}
+
+// 获取验证码
+export const getUserCodeApi = (phone: string) => {
+  return http.get<any, GetCodeResponseType>(API.GETUSERCODE_URL + phone)
 }
 
 // 获取医院科室
