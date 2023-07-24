@@ -4,6 +4,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import useUserStore from "@/store/modules/user";
 import { storeToRefs } from "pinia";
+import CountDown from '../count_down/index.vue'
 
 const { dialogVisible } = storeToRefs(useUserStore());
 const { getCodeFn } = useUserStore();
@@ -29,15 +30,23 @@ let isPhone = computed(() => {
   return (/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(loginParams.value.phone))
 })
 // 点击获取验证码按钮
+const flag = ref<boolean>(false)
 const handleGetCodeFn = async () => {
   try {
-    const code = await getCodeFn(loginParams.value.phone)
-    loginParams.value.code = code
+    flag.value = true
+    getCodeFn(loginParams.value.phone).then((code: string) => {
+      loginParams.value.code = code
+    })
   } catch (error) {
-    console.log(error);
     ElMessage.error(error.message)
   }
 }
+
+// 子组件通知父组件时间到
+const timeOverFn = () => {
+  flag.value = false
+}
+
 // 点击登录按钮
 const onLogin = () => {}
 </script>
@@ -68,7 +77,10 @@ const onLogin = () => {}
                     />
                   </el-form-item>
                   <el-form-item>
-                    <el-button :disabled="!isPhone" @click="handleGetCodeFn">获取验证码</el-button>
+                    <el-button :disabled="!isPhone || flag" @click="handleGetCodeFn">
+                      <span v-if="!flag">获取验证码</span>
+                      <CountDown @timeOverFn="timeOverFn" :flag="flag" v-else />
+                    </el-button>
                   </el-form-item>
                 </el-form>
                 <div class="bottom">
