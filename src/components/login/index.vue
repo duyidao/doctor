@@ -4,7 +4,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import useUserStore from "@/store/modules/user";
 import { storeToRefs } from "pinia";
-import CountDown from '../count_down/index.vue'
+import CountDown from "../count_down/index.vue";
 
 const { dialogVisible } = storeToRefs(useUserStore());
 const { getCodeFn, loginFn } = useUserStore();
@@ -14,47 +14,83 @@ const scene = ref<number>(0);
 
 // 点击修改登录方式
 const changeLoginType = (e: number) => {
-  scene.value = e
-}
+  scene.value = e;
+};
 
 /**
  * 账号密码登录方式------------------------
  */
 // 手机号验证码数据对象
 const loginParams = ref({
-  phone: '',
-  code: ''
-})
+  phone: "",
+  code: "",
+});
 // 手机号码校验是否通过
 let isPhone = computed(() => {
-  return (/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(loginParams.value.phone))
-})
+  return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(
+    loginParams.value.phone
+  );
+});
 // 点击获取验证码按钮
-const flag = ref<boolean>(false)
+const flag = ref<boolean>(false);
 const handleGetCodeFn = async () => {
   try {
-    flag.value = true
+    flag.value = true;
     getCodeFn(loginParams.value.phone).then((code: string) => {
-      loginParams.value.code = code
-    })
-  } catch (error) {
-    ElMessage.error(error.message)
+      loginParams.value.code = code;
+    });
+  } catch (error: any) {
+    ElMessage.error(error.message);
   }
-}
+};
 
 // 子组件通知父组件时间到
 const timeOverFn = () => {
-  flag.value = false
-}
+  flag.value = false;
+};
+
+const formRef = ref<any>(null);
+// 校验
+const validatorPhone = (_rule: any, value: any, callback: any) => {
+  // _rule：表单校验规则；value：表单内容；callback：回调函数
+  if (
+    /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(
+      value
+    )
+  ) {
+    callback();
+  } else {
+    callback(new Error("手机号校验错误，请输入正确手机号"));
+  }
+};
+const formRules = ref<any>({
+  phone: [
+    { required: true, trigger: ["blur", "change"], message: "手机号必填" },
+    { validator: validatorPhone, trigger: ["blur", "change"] },
+  ],
+  code: [
+    { required: true, trigger: ["blur", "change"], message: "验证码必填" },
+    { min: 6, max: 6, trigger: ["blur", "change"], message: "验证码为6位" },
+  ],
+});
 
 // 点击登录按钮
-const onLogin = () => {
-  loginFn(loginParams.value).then((res: any) => {
-    dialogVisible.value = false
-  }).catch((err: any) => {
-    ElMessage.error(err)
-  })
-}
+const onLogin = (formRef: any) => {
+  if (!formRef) return; // 没有该form节点
+  formRef.validate((valid: any) => {
+    if (valid) {
+      loginFn(loginParams.value)
+        .then((_res: any) => {
+          dialogVisible.value = false;
+        })
+        .catch((err: any) => {
+          ElMessage.error(err);
+        });
+    } else {
+      ElMessage.error('表单校验失败，请重新填写后登录');
+    }
+  });
+};
 </script>
 
 <template>
@@ -67,36 +103,45 @@ const onLogin = () => {
           <el-col :span="12">
             <div class="login_form">
               <div v-show="scene === 0">
-                <el-form>
-                  <el-form-item>
+                <el-form ref="formRef" :model="loginParams" :rules="formRules">
+                  <el-form-item prop="phone">
                     <el-input
                       :prefix-icon="User"
                       v-model="loginParams.phone"
+                      maxLength="11"
                       placeholder="请输入手机号码"
                     />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="code">
                     <el-input
                       :prefix-icon="Lock"
                       v-model="loginParams.code"
+                      maxLength="6"
                       placeholder="请输入手机验证码"
                     />
                   </el-form-item>
                   <el-form-item>
-                    <el-button :disabled="!isPhone || flag" @click="handleGetCodeFn">
+                    <el-button
+                      :disabled="!isPhone || flag"
+                      @click="handleGetCodeFn"
+                    >
                       <span v-if="!flag">获取验证码</span>
                       <CountDown @timeOverFn="timeOverFn" :flag="flag" v-else />
                     </el-button>
                   </el-form-item>
                 </el-form>
                 <div class="bottom">
-                  <el-button type="primary" style="width: 90%" size="default" @click="onLogin"
+                  <el-button
+                    type="primary"
+                    style="width: 90%"
+                    size="default"
+                    @click="onLogin(formRef)"
                     >用户登录</el-button
                   >
                   <p @click="changeLoginType(1)">微信扫码登录</p>
                   <svg
                     @click="changeLoginType(1)"
-                    style="cursor: pointer;"
+                    style="cursor: pointer"
                     t="1690164462308"
                     class="icon"
                     viewBox="0 0 1024 1024"
