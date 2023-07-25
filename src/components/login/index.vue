@@ -81,7 +81,7 @@ const onLogin = (formRef: any) => {
     if (valid) {
       loginFn(loginParams.value)
         .then((_res: any) => {
-          dialogVisible.value = false;
+          closeDialogFn()
         })
         .catch((err: any) => {
           ElMessage.error(err);
@@ -91,11 +91,22 @@ const onLogin = (formRef: any) => {
     }
   });
 };
+
+// 关闭对话框
+const closeDialogFn = () => {
+  // 重置内容与校验
+  loginParams.value = {
+    phone: "",
+    code: ""
+  }
+  formRef.value.resetFields()
+  dialogVisible.value = false
+}
 </script>
 
 <template>
   <div class="login">
-    <el-dialog v-model="dialogVisible" title="用户登录">
+    <el-dialog v-model="dialogVisible" title="用户登录" @close="closeDialogFn">
       <!-- 对话框身体部分 -->
       <div class="content">
         <el-row>
@@ -222,7 +233,7 @@ const onLogin = (formRef: any) => {
         </el-row>
       </div>
       <template #footer>
-        <el-button>关闭窗口</el-button>
+        <el-button @click="closeDialogFn">关闭窗口</el-button>
       </template>
     </el-dialog>
   </div>
