@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { ArrowDown } from '@element-plus/icons-vue'
 
 const { dialogVisible, userInfo } = storeToRefs(useUserStore());
+const { logout } = useUserStore();
 const router = useRouter();
 
 // 点击logo跳转首页
@@ -18,6 +19,13 @@ const handleHomeFn = () => {
 const handleLoginFn = () => {
   dialogVisible.value = true;
 };
+
+// 退出登录
+const logoutFn = () => {
+  logout()
+  // 清空存储后跳转首页
+  router.replace('/doctor/home')
+}
 </script>
 
 <template>
@@ -47,7 +55,7 @@ const handleLoginFn = () => {
               <el-dropdown-item>实名认证</el-dropdown-item>
               <el-dropdown-item>挂号订单</el-dropdown-item>
               <el-dropdown-item>就诊人管理</el-dropdown-item>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logoutFn">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -104,7 +112,7 @@ const handleLoginFn = () => {
         cursor: pointer;
 
         &:first-child {
-          margin-left: 15px;
+          margin-right: 15px;
         }
       }
     }

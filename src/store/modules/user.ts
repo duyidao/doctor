@@ -25,11 +25,17 @@ const useUserStore = defineStore('user', () => {
     }
   }
 
+  // 退出登录
+  const logout = () => {
+    userInfo.value = {}
+  }
+
   return {
     dialogVisible,
     userInfo,
     getCodeFn,
-    loginFn
+    loginFn,
+    logout
   }
 }, {
   persist: true

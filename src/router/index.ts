@@ -35,6 +35,10 @@ export default createRouter({
           component: () => import('@/pages/hospital/search/index.vue')
         },
         {
+          path: 'register_step',
+          component: () => import('@/pages/hospital/register/register_step.vue')
+        },
+        {
           path: '',
           redirect: '/doctor/hospital/register'
         },

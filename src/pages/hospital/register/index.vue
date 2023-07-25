@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import useDetailStore from "@/store/modules/hospitalDetail";
 import { storeToRefs } from 'pinia'
 import useUserStore from "@/store/modules/user";
 
-const { dialogVisible } = storeToRefs(useUserStore());
+const router = useRouter()
+const route = useRoute()
+
+const { dialogVisible, userInfo } = storeToRefs(useUserStore());
 const { hospitalInfo, hospitalDepartmentData } = storeToRefs(useDetailStore());
 
 const activeIndex = ref<number>(0)
@@ -21,8 +25,15 @@ const handleNavFn = (i: number) => {
   })
 }
 
-const handleDepartFn = () => {
-  dialogVisible.value = true
+const handleDepartFn = (depart: any) => {
+  if(!userInfo.value.token) dialogVisible.value = true
+  else router.push({
+    path: '/doctor/hospital/register_step',
+    query: {
+      depcode: depart.depcode,
+      code: route.query.code,
+    }
+  })
 }
 </script>
 
@@ -81,7 +92,7 @@ const handleDepartFn = () => {
     <div class="department">
       <div class="leftNav">
         <ul>
-          <li :class="{'active': index === activeIndex}" v-for="(item, index) in hospitalDepartmentData" :key="item.depcode" @click="handleNavFn(index, item)">{{ item.depname }}</li>
+          <li :class="{'active': index === activeIndex}" v-for="(item, index) in hospitalDepartmentData" :key="item.depcode" @click="handleNavFn(index)">{{ item.depname }}</li>
         </ul>
       </div>
       <div class="rightInfo">
@@ -89,7 +100,7 @@ const handleDepartFn = () => {
           <h1>{{ item.depname }}</h1>
           <!-- 小科室 -->
           <ul>
-            <li v-for="depart in item.children" :key="depart.depcode" @click="handleDepartFn">{{ depart.depname }}</li>
+            <li v-for="depart in item.children" :key="depart.depcode" @click="handleDepartFn(depart)">{{ depart.depname }}</li>
           </ul>
         </div>
       </div>
@@ -211,7 +222,8 @@ const handleDepartFn = () => {
           li {
             width: 33%;
             margin-bottom: 20px;
-            padding-right: 10px;
+            padding: 10px 10px 10px 0;
+            cursor: pointer;
           }
         }
       }

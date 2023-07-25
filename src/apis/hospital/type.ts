@@ -83,3 +83,31 @@ export interface LoginType {
 	name?: string;
 	token?: string;
 }
+
+
+// 科室挂号接口类型
+export interface BookingType {
+  total: number
+  bookingScheduleList: BookingScheduleList[]
+  baseMap: BaseMap
+}
+export interface BookingScheduleList {
+  workDate: string
+  workDateMd: string
+  dayOfWeek: string
+  docCount: number
+  reservedNumber: any
+  availableNumber: number
+  status: number
+}
+export interface BaseMap {
+  workDateString?: string
+  releaseTime?: string
+  bigname?: string
+  stopTime?: string
+  depname?: string
+  hosname?: string
+}
+export interface BookingResponseType extends responseType {
+  data: BookingType
+}

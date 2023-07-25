@@ -1,7 +1,9 @@
 import axios from 'axios';
+import useUserStore from '@/store/modules/user.ts'
+import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus';
-// 对axios二次封装
 
+// 对axios二次封装
 const http = axios.create({
   baseURL: '/api',
   // baseURL: 'http://atguigu.com',
@@ -10,7 +12,11 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => {
   // 请求拦截器配置对象
-
+  const { userInfo } = storeToRefs(useUserStore())
+  if(userInfo.value.token) {
+    config.headers.token = userInfo.value.token
+  }
+  
   return config
 })
 
