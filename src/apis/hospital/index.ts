@@ -1,7 +1,7 @@
 // @ts-ignore
 import http from '@/request'
 
-import type { HospitalDetailResponseType, HospitalDepartmentResponseType, GetCodeResponseType, userLoginDataType, LoginResponseType, BookingResponseType, DoctorListResponseType } from './type.ts'
+import type { HospitalDetailResponseType, HospitalDepartmentResponseType, GetCodeResponseType, userLoginDataType, LoginResponseType, BookingResponseType, DoctorListResponseType, DoctorInfoResponseType } from './type.ts'
 
 enum API {
   HOSPITALDETAIL_URL = '/hosp/hospital/', // 医院详情
@@ -11,6 +11,12 @@ enum API {
   GETBOOKSCHEDULE_URL = '/hosp/hospital/auth/getBookingScheduleRule/', // 获取预约挂号
   GETSCHEDULELIST_URL = '/hosp/hospital/auth/findScheduleList/', // 获取排班医生列表
   GETUSER_URL = '/user/patient/auth/findAll', // 获取就诊人列表
+  GETDOCTOR_URL = '/hosp/hospital/getSchedule/', // 获取挂号医生信息
+}
+
+// 获取挂号医生信息
+export const getDoctorApi = (scheduleId: string) => {
+  return http.get<any, DoctorInfoResponseType>(API.GETDOCTOR_URL + scheduleId)
 }
 
 // 获取就诊人列表

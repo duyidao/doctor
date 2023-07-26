@@ -1,17 +1,32 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { findAllUserApi } from "@/apis/hospital/index.ts";
+import { findAllUserApi, getDoctorApi } from "@/apis/hospital/index.ts";
+import type { DoctorItemType, DoctorInfoResponseType } from "@/apis/hospital/type.ts";
 import Visitor from "./components/visitor.vue";
 import { User } from "@element-plus/icons-vue";
+import { useRoute } from "vue-router";
 
-// 获取就诊人信息
+const route = useRoute()
+
+// 获取就诊人信息与医生信息
 const userList = ref<any[]>([]);
 const getUserListFn = async () => {
   const res = await findAllUserApi();
   console.log(res);
   userList.value = res.data;
 };
-onMounted(() => getUserListFn());
+
+const doctorInfo = ref<DoctorItemType>({})
+const getDoctorInfotFn = async () => {
+  const res: DoctorInfoResponseType = await getDoctorApi(route.query.id as string);
+  console.log(res);
+  doctorInfo.value = res.data;
+};
+
+onMounted(() => {
+  getUserListFn()
+  getDoctorInfotFn()
+});
 </script>
 
 <template>
@@ -50,16 +65,21 @@ onMounted(() => getUserListFn());
       <!-- 卡片表格内容 -->
       <el-descriptions :column="2" border>
         <el-descriptions-item label="就诊日期"
-          >kooriookami</el-descriptions-item
+          >{{ doctorInfo.workDate }}</el-descriptions-item
         >
         <el-descriptions-item label="就诊医院"
-          >18100000000</el-descriptions-item
+          >{{ doctorInfo.param?.hosname }}</el-descriptions-item
         >
-        <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-        <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-        <el-descriptions-item label="Address"
-          >No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu
-          Province</el-descriptions-item
+        <el-descriptions-item label="就诊科室">{{ doctorInfo.param?.depname }}</el-descriptions-item>
+        <el-descriptions-item label="医生名字">{{ doctorInfo.docname }}</el-descriptions-item>
+        <el-descriptions-item label="医生职称"
+          >{{ doctorInfo.title }}</el-descriptions-item
+        >
+        <el-descriptions-item label="医生专长"
+          >{{ doctorInfo.skill }}</el-descriptions-item
+        >
+        <el-descriptions-item label="服务费"
+          >{{ doctorInfo.amount }}</el-descriptions-item
         >
       </el-descriptions>
     </el-card>

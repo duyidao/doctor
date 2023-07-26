@@ -115,23 +115,23 @@ export interface BookingResponseType extends responseType {
 
 // 医生排班列表数据
 export interface DoctorItemType {
-  id: string
-  createTime: string
-  updateTime: string
-  isDeleted: number
-  param: Param
-  hoscode: string
-  depcode: string
-  title: string
-  docname: string
-  skill: string
-  workDate: string
-  workTime: number
-  reservedNumber: number
-  availableNumber: number
-  amount: number
-  status: number
-  hosScheduleId: string
+  id?: string
+  createTime?: string
+  updateTime?: string
+  isDeleted?: number
+  param?: Param
+  hoscode?: string
+  depcode?: string
+  title?: string
+  docname?: string
+  skill?: string
+  workDate?: string
+  workTime?: number
+  reservedNumber?: number
+  availableNumber?: number
+  amount?: number
+  status?: number
+  hosScheduleId?: string
 }
 export interface Param {
   dayOfWeek: string
@@ -140,4 +140,9 @@ export interface Param {
 }
 export interface DoctorListResponseType extends responseType {
   data: DoctorItemType[]
+}
+
+// 医生详情接口返回类型
+export interface DoctorInfoResponseType extends responseType {
+  data: DoctorItemType
 }
