@@ -2,7 +2,8 @@
 import { Edit } from "@element-plus/icons-vue";
 
 defineProps<{
-  item: any
+  item: any,
+  hasChose: boolean
 }>()
 </script>
 
@@ -26,6 +27,11 @@ defineProps<{
       <div class="bottom-item">婚姻状况：{{ item.isMarry === 0 ? '未婚' : '已婚' }}</div>
       <div class="bottom-item">当前住处：{{ item.param.provinceString }}/{{ item.param.cityString }}/{{ item.param.regionString }}</div>
       <div class="bottom-item">详细地址：{{ item.param.fullAddress }}</div>
+
+      <!-- 已选择 -->
+      <transition name="chose">
+        <div v-if="hasChose" class="has_chose">已选择</div>
+      </transition>
     </div>
   </div>
 </template>
@@ -62,10 +68,38 @@ defineProps<{
   }
 
   .bottom {
+    position: relative;
     padding: 20px;
 
     .bottom-item {
       line-height: 30px;
+    }
+
+    .chose-enter-from {
+      transform: scale(1);
+    }
+    .chose-enter-active {
+      transition: all .3s;
+    }
+    .chose-enter-to {
+      transform: scale(1.2);
+    }
+
+    .has_chose {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transform: rotate(45deg);
+      width: 200px;
+      height: 200px;
+      color: red;
+      border-radius: 50%;
+      border: 1px solid red;
+      text-align: center;
+      line-height: 200px;
+      font-weight: bold;
+      opacity: 0.5;
     }
   }
 }

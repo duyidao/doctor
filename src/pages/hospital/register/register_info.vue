@@ -27,6 +27,13 @@ onMounted(() => {
   getUserListFn()
   getDoctorInfotFn()
 });
+
+// 存储用户选择就诊人的索引值
+const choseUserIndex = ref<number>(-1)
+
+const changeUserFn = (i: number) => {
+  choseUserIndex.value = i
+}
 </script>
 
 <template>
@@ -47,9 +54,11 @@ onMounted(() => {
         <template v-else>
           <Visitor
             class="visitor-item"
-            v-for="item in userList"
+            v-for="(item, index) in userList"
             :key="item.id"
             :item="item"
+            :hasChose="choseUserIndex === index"
+            @click="changeUserFn(index)"
           />
         </template>
       </div>
@@ -83,6 +92,10 @@ onMounted(() => {
         >
       </el-descriptions>
     </el-card>
+
+    <div style="width: 100%; text-align: center;">
+      <el-button :disabled="choseUserIndex === -1" type="primary">确认就诊人</el-button>
+    </div>
   </div>
 </template>
 
