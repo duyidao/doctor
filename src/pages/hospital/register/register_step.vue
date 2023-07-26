@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { getbookingApi, findScheduleListApi } from "@/apis/hospital/index.ts";
 import type {
   BookingResponseType,
@@ -11,6 +11,7 @@ import type {
 } from "@/apis/hospital/type.ts";
 
 const route = useRoute();
+const router = useRouter();
 
 const total = ref<number>(0);
 const pageSize = ref<number>(6);
@@ -70,6 +71,16 @@ const morningList = computed(() => {
 const afternoonList = computed(() => {
   return doctorList.value.filter(item => item.workTime !== 0)
 })
+
+// 点击按钮去到医生详情页面
+const choseDoctorFn = (e: DoctorItemType) => {
+  router.push({
+    path: '/doctor/hospital/register_info',
+    query: {
+      id: e.id
+    }
+  })
+}
 </script>
 
 <template>
@@ -160,7 +171,7 @@ const afternoonList = computed(() => {
             </div>
             <div class="right">
               <div class="money">￥{{ item.amount }}</div>
-              <el-button type="primary">剩余{{ item.availableNumber }}</el-button>
+              <el-button type="primary" @click="choseDoctorFn(item)">剩余{{ item.availableNumber }}</el-button>
             </div>
           </div>
         </div>
@@ -196,7 +207,7 @@ const afternoonList = computed(() => {
             </div>
             <div class="right">
               <div class="money">￥{{ item.amount }}</div>
-              <el-button type="primary">剩余{{ item.availableNumber }}</el-button>
+              <el-button type="primary" @click="choseDoctorFn(item)">剩余{{ item.availableNumber }}</el-button>
             </div>
           </div>
         </div>
