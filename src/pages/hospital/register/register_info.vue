@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { findAllUserApi } from "@/apis/hospital/index.ts";
 import Visitor from "./components/visitor.vue";
 import { User } from "@element-plus/icons-vue";
+
+// 获取就诊人信息
+const userList = ref<any[]>([]);
+const getUserListFn = async () => {
+  const res = await findAllUserApi();
+  console.log(res);
+  userList.value = res.data;
+};
+onMounted(() => getUserListFn());
 </script>
 
 <template>
@@ -17,7 +28,15 @@ import { User } from "@element-plus/icons-vue";
       </template>
       <!-- 就诊人信息 -->
       <div class="user">
-        <Visitor class="visitor-item" v-for="item in 4" :key="item" />
+        <el-empty style="margin: 0 auto;" v-if="userList.length <= 0" description="暂无就诊人信息" />
+        <template v-else>
+          <Visitor
+            class="visitor-item"
+            v-for="item in userList"
+            :key="item.id"
+            :item="item"
+          />
+        </template>
       </div>
     </el-card>
 
@@ -33,13 +52,11 @@ import { User } from "@element-plus/icons-vue";
         <el-descriptions-item label="就诊日期"
           >kooriookami</el-descriptions-item
         >
-        <el-descriptions-item label="Telephone"
+        <el-descriptions-item label="就诊医院"
           >18100000000</el-descriptions-item
         >
         <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-        <el-descriptions-item label="Remarks">
-          <el-tag size="small">School</el-tag>
-        </el-descriptions-item>
+        <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
         <el-descriptions-item label="Address"
           >No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu
           Province</el-descriptions-item

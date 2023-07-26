@@ -1,28 +1,31 @@
 <script setup lang="ts">
 import { Edit } from "@element-plus/icons-vue";
+
+defineProps<{
+  item: any
+}>()
 </script>
 
 <template>
   <div class="visitor">
     <div class="top">
       <div class="left">
-        <div class="free">医保</div>
-        <div class="username">aaaaa</div>
+        <div class="free">{{ item.isInsure === 1 ? '医保' : '自费' }}</div>
+        <div class="username">{{ item.name }}</div>
       </div>
       <div class="right">
         <el-button type="primary" :icon="Edit" circle></el-button>
       </div>
     </div>
     <div class="bottom">
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
-      <div class="bottom-item">证件类型：1213312312</div>
+      <div class="bottom-item">证件号码：{{ item.param.certificatesTypeString }}</div>
+      <div class="bottom-item">证件类型：{{ item.certificatesNo }}</div>
+      <div class="bottom-item">用户性别：{{ item.sex === 1 ? '男' : '女' }}</div>
+      <div class="bottom-item">出生日期：{{ item.birthdate }}</div>
+      <div class="bottom-item">手机号码：{{ item.phone }}</div>
+      <div class="bottom-item">婚姻状况：{{ item.isMarry === 0 ? '未婚' : '已婚' }}</div>
+      <div class="bottom-item">当前住处：{{ item.param.provinceString }}/{{ item.param.cityString }}/{{ item.param.regionString }}</div>
+      <div class="bottom-item">详细地址：{{ item.param.fullAddress }}</div>
     </div>
   </div>
 </template>

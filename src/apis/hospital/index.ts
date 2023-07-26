@@ -10,9 +10,15 @@ enum API {
   LOGIN_URL = '/user/login', // 登录
   GETBOOKSCHEDULE_URL = '/hosp/hospital/auth/getBookingScheduleRule/', // 获取预约挂号
   GETSCHEDULELIST_URL = '/hosp/hospital/auth/findScheduleList/', // 获取排班医生列表
+  GETUSER_URL = '/user/patient/auth/findAll', // 获取就诊人列表
 }
 
-// 获取预约挂号
+// 获取就诊人列表
+export const findAllUserApi = () => {
+  return http.get<any, any>(API.GETUSER_URL)
+}
+
+// 获取排班医生列表
 export const findScheduleListApi = (hoscode: string, depcode: string, workDate: string) => {
   return http.get<any, DoctorListResponseType>(API.GETSCHEDULELIST_URL + `${hoscode}/${depcode}/${workDate}`)
 }
