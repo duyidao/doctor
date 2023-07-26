@@ -111,3 +111,33 @@ export interface BaseMap {
 export interface BookingResponseType extends responseType {
   data: BookingType
 }
+
+
+// 医生排班列表数据
+export interface DoctorItemType {
+  id: string
+  createTime: string
+  updateTime: string
+  isDeleted: number
+  param: Param
+  hoscode: string
+  depcode: string
+  title: string
+  docname: string
+  skill: string
+  workDate: string
+  workTime: number
+  reservedNumber: number
+  availableNumber: number
+  amount: number
+  status: number
+  hosScheduleId: string
+}
+export interface Param {
+  dayOfWeek: string
+  depname: string
+  hosname: string
+}
+export interface DoctorListResponseType extends responseType {
+  data: DoctorItemType[]
+}
