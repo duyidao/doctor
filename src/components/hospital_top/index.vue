@@ -26,6 +26,13 @@ const logoutFn = () => {
   // 清空存储后跳转首页
   router.replace('/doctor/home')
 }
+
+// 点击下拉菜单前往会员中心页
+const onUserFn = (e: string) => {
+  router.push({
+    path: '/doctor/user/' + e
+  })
+}
 </script>
 
 <template>
@@ -52,9 +59,9 @@ const logoutFn = () => {
           </p>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>实名认证</el-dropdown-item>
-              <el-dropdown-item>挂号订单</el-dropdown-item>
-              <el-dropdown-item>就诊人管理</el-dropdown-item>
+              <el-dropdown-item @click="onUserFn('certification')">实名认证</el-dropdown-item>
+              <el-dropdown-item @click="onUserFn('order')">挂号订单</el-dropdown-item>
+              <el-dropdown-item @click="onUserFn('patient')">就诊人管理</el-dropdown-item>
               <el-dropdown-item @click="logoutFn">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
