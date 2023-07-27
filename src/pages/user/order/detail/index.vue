@@ -5,12 +5,14 @@ import {
   getOrderInfoApi,
   cancelOrderApi,
   getQRCodeApi,
+  payApi,
 } from "@/apis/user/index.ts";
 import type {
   orderInfoResponseType,
   orderInfoType,
   qrCodeResponseType,
   codeType,
+  payResponseType,
 } from "@/apis/user/type.ts";
 import { ElMessage } from "element-plus";
 // @ts-ignore
@@ -44,6 +46,7 @@ const dialogPayVisible = ref<boolean>(false);
 // 点击支付按钮
 const payCode = ref<codeType>({});
 const imgUrl = ref<string>(""); // 图片二维码
+const timer = ref<any>(null); // 定时器
 const handlePayFn = async () => {
   dialogPayVisible.value = true;
   const res: qrCodeResponseType = await getQRCodeApi(
@@ -52,7 +55,24 @@ const handlePayFn = async () => {
   if (res.code === 200) {
     payCode.value = res.data;
     imgUrl.value = await QRCode.toDataURL(res.data.codeUrl);
+
+    // 只要显示二维码，每隔一段时间查询是否支付成功
+    timer.value = setInterval(() => {
+      payApi(route.query.orderId as string).then((result: payResponseType) => {
+        if (result.data) {
+          dialogPayVisible.value = false;
+          ElMessage.success("支付成功");
+          clearInterval(timer.value); // 清除定时器
+          getOrderInfoFn(); // 再次获取订单详情
+        }
+      });
+    }, 2000);
   }
+};
+
+const closeFn = () => {
+  dialogPayVisible.value = false;
+  clearInterval(timer.value); // 清除定时器
 };
 </script>
 
@@ -157,7 +177,12 @@ const handlePayFn = async () => {
     </el-card>
 
     <!-- 展示支付二维码 -->
-    <el-dialog v-model="dialogPayVisible" width="400" title="微信支付">
+    <el-dialog
+      v-model="dialogPayVisible"
+      width="400"
+      title="微信支付"
+      @close="closeFn"
+    >
       <!-- 图片内容区域 -->
       <div class="qrcode">
         <img :src="imgUrl" alt="" />
@@ -166,9 +191,7 @@ const handlePayFn = async () => {
       </div>
       <template #footer>
         <div>
-          <el-button type="primary" @click="dialogPayVisible = false"
-            >关闭窗口</el-button
-          >
+          <el-button type="primary" @click="closeFn">关闭窗口</el-button>
         </div>
       </template>
     </el-dialog>

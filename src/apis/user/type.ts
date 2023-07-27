@@ -48,3 +48,8 @@ export interface codeType {
 export interface qrCodeResponseType extends responseType {
   data: codeType;
 }
+
+// 支付结果接口类型
+export interface payResponseType extends responseType {
+  data: boolean;
+}
