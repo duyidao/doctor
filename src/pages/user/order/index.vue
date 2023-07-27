@@ -9,7 +9,7 @@ const route = useRoute();
 <template>
   <div class="order">
     <!-- 展示全部订单 -->
-    <div class="order-list" v-if="!route.query.id">
+    <div class="order-list" v-if="!route.query.orderId">
       <All />
     </div>
     <!-- 展示订单详情 -->
