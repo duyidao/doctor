@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { getOrderInfoApi } from "@/apis/user/index.ts";
+import { getOrderInfoApi, cancelOrderApi } from "@/apis/user/index.ts";
 import type { orderInfoResponseType, orderInfoType } from "@/apis/user/type.ts";
+import { ElMessage } from "element-plus";
 
 const route = useRoute();
 
+// 获取订单详情
 const orderInfo = ref<orderInfoType>({});
 const getOrderInfoFn = async () => {
   const res: orderInfoResponseType = await getOrderInfoApi(
@@ -14,6 +16,17 @@ const getOrderInfoFn = async () => {
   orderInfo.value = res.data;
 };
 onMounted(() => getOrderInfoFn());
+
+// 取消预约按钮被点击
+const onCancelFn = async () => {
+  const res = await cancelOrderApi(route.query.orderId as string);
+  if (res.code === 200) {
+    ElMessage.success(res.message);
+    getOrderInfoFn();
+  } else {
+    ElMessage.error(res.message);
+  }
+};
 </script>
 
 <template>
@@ -84,9 +97,19 @@ onMounted(() => getOrderInfoFn());
             }}</el-descriptions-item>
           </el-descriptions>
 
-          <div class="btn">
-            <el-button>取消预约</el-button>
-            <el-button type="primary">支付</el-button>
+          <!-- 只有在预约成功状态显示 -->
+          <div
+            class="btn"
+            v-if="orderInfo.orderStatus === 0 || orderInfo.orderStatus === 1"
+          >
+            <el-popconfirm title="确定要取消预约吗？" @confirm="onCancelFn">
+              <template #reference>
+                <el-button>取消预约</el-button>
+              </template>
+            </el-popconfirm>
+            <el-button type="primary" v-if="orderInfo.orderStatus === 0"
+              >支付</el-button
+            >
           </div>
         </div>
         <div class="right">
