@@ -4,9 +4,12 @@ import { findAllUserApi, getDoctorApi } from "@/apis/hospital/index.ts";
 import type { DoctorItemType, DoctorInfoResponseType } from "@/apis/hospital/type.ts";
 import Visitor from "./components/visitor.vue";
 import { User } from "@element-plus/icons-vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { submitOrderApi } from '@/apis/user/index'
+import { ElMessage } from "element-plus";
 
 const route = useRoute()
+const router = useRouter()
 
 // 获取就诊人信息与医生信息
 const userList = ref<any[]>([]);
@@ -33,6 +36,19 @@ const choseUserIndex = ref<number>(-1)
 
 const changeUserFn = (i: number) => {
   choseUserIndex.value = i
+}
+
+// 获取订单
+const getOrderFn = async () => {
+  const res = await submitOrderApi(doctorInfo.value.hoscode as string, doctorInfo.value.id as string, userList.value[choseUserIndex.value].id as number)
+  
+  if(res.code === 200) {
+    router.push({
+      path: '/doctor/user/order'
+    })
+  } else {
+    ElMessage.error(res.message)
+  }
 }
 </script>
 
@@ -94,7 +110,7 @@ const changeUserFn = (i: number) => {
     </el-card>
 
     <div style="width: 100%; text-align: center;">
-      <el-button :disabled="choseUserIndex === -1" type="primary">确认就诊人</el-button>
+      <el-button @click="getOrderFn" :disabled="choseUserIndex === -1" type="primary">确认就诊人</el-button>
     </div>
   </div>
 </template>
