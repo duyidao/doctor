@@ -1,9 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { getOrderInfoApi, cancelOrderApi } from "@/apis/user/index.ts";
-import type { orderInfoResponseType, orderInfoType } from "@/apis/user/type.ts";
+import {
+  getOrderInfoApi,
+  cancelOrderApi,
+  getQRCodeApi,
+} from "@/apis/user/index.ts";
+import type {
+  orderInfoResponseType,
+  orderInfoType,
+  qrCodeResponseType,
+  codeType,
+} from "@/apis/user/type.ts";
 import { ElMessage } from "element-plus";
+// @ts-ignore
+import QRCode from "qrcode";
 
 const route = useRoute();
 
@@ -25,6 +36,22 @@ const onCancelFn = async () => {
     getOrderInfoFn();
   } else {
     ElMessage.error(res.message);
+  }
+};
+
+const dialogPayVisible = ref<boolean>(false);
+
+// 点击支付按钮
+const payCode = ref<codeType>({});
+const imgUrl = ref<string>(""); // 图片二维码
+const handlePayFn = async () => {
+  dialogPayVisible.value = true;
+  const res: qrCodeResponseType = await getQRCodeApi(
+    route.query.orderId as string
+  );
+  if (res.code === 200) {
+    payCode.value = res.data;
+    imgUrl.value = await QRCode.toDataURL(res.data.codeUrl);
   }
 };
 </script>
@@ -107,7 +134,10 @@ const onCancelFn = async () => {
                 <el-button>取消预约</el-button>
               </template>
             </el-popconfirm>
-            <el-button type="primary" v-if="orderInfo.orderStatus === 0"
+            <el-button
+              type="primary"
+              v-if="orderInfo.orderStatus === 0"
+              @click="handlePayFn"
               >支付</el-button
             >
           </div>
@@ -125,6 +155,23 @@ const onCancelFn = async () => {
         </div>
       </div>
     </el-card>
+
+    <!-- 展示支付二维码 -->
+    <el-dialog v-model="dialogPayVisible" width="400" title="微信支付">
+      <!-- 图片内容区域 -->
+      <div class="qrcode">
+        <img :src="imgUrl" alt="" />
+        <p>请使用微信扫一扫</p>
+        <p>扫描二维码支付</p>
+      </div>
+      <template #footer>
+        <div>
+          <el-button type="primary" @click="dialogPayVisible = false"
+            >关闭窗口</el-button
+          >
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -199,6 +246,31 @@ const onCancelFn = async () => {
         }
       }
     }
+  }
+
+  .qrcode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 200px;
+      height: 200px;
+    }
+
+    p {
+      font-size: 20px;
+      color: #555;
+
+      &:nth-of-type(1) {
+        margin: 20px 0;
+      }
+    }
+  }
+
+  :deep(.el-dialog__body) {
+    border-top: 1px solid #7f7f7f;
+    border-bottom: 1px solid #7f7f7f;
   }
 }
 </style>

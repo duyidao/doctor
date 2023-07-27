@@ -1,12 +1,18 @@
 // @ts-ignore
 import http from '@/request'
 
-import type { orderInfoResponseType } from './type.ts'
+import type { orderInfoResponseType, qrCodeResponseType } from './type.ts'
 
 enum API {
   SUBMITORDER_URL = '/order/orderInfo/auth/submitOrder/', // 获取订单号码
   ORDERINFO_URL = '/order/orderInfo/auth/getOrderInfo/', // 获取订单详情
   CANCEL_URL = '/order/orderInfo/auth/cancelOrder/', // 取消预约
+  QRCODE_URL = '/order/weixin/createNative/', // 获取订单二维码
+}
+
+// 获取订单二维码
+export const getQRCodeApi = (id: string) => {
+  return http.get<any, qrCodeResponseType>(API.QRCODE_URL + `${id}`)
 }
 
 // 取消预约
