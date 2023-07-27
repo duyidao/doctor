@@ -1,8 +1,22 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { InfoFilled } from "@element-plus/icons-vue";
+import { getUserInfoApi } from '@/apis/user/index.ts'
+import type { UserInfoResponseType, UserType } from '@/apis/user/type.ts'
 
 const fileList = ref([]);
+
+// 用户信息获取
+const userInfo = ref<UserType>({})
+const getUserInfoFn = async () => {
+  const res: UserInfoResponseType = await getUserInfoApi()
+  console.log(res);
+  if(res.code === 200) {
+    userInfo.value = res.data
+  }
+}
+
+onMounted(() => getUserInfoFn())
 </script>
 
 <template>
@@ -20,20 +34,20 @@ const fileList = ref([]);
 
     <!-- 认证成功的信息 -->
     <el-descriptions
-      v-if="false"
+      v-if="true"
       :column="1"
       border
       style="margin: 25px 0"
       size="small"
     >
       <el-descriptions-item align="center" label="用户姓名"
-        >kooriookami</el-descriptions-item
+        >{{ userInfo.name }}</el-descriptions-item
       >
       <el-descriptions-item align="center" label="证件类型"
-        >18100000000</el-descriptions-item
+        >{{ userInfo.certificatesType === '10' ? '身份证' : '户口本' }}</el-descriptions-item
       >
       <el-descriptions-item align="center" label="证件号码"
-        >Suzhou</el-descriptions-item
+        >{{ userInfo.certificatesNo }}</el-descriptions-item
       >
     </el-descriptions>
 

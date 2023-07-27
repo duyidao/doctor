@@ -53,3 +53,27 @@ export interface qrCodeResponseType extends responseType {
 export interface payResponseType extends responseType {
   data: boolean;
 }
+
+
+// 用户信息接口类型
+export interface UserType {
+  id: number
+  createTime: string
+  updateTime: string
+  isDeleted: number
+  param: Param
+  openid: any
+  nickName: any
+  phone: string
+  name: string
+  certificatesType: any
+  certificatesNo: any
+  certificatesUrl: any
+  authStatus: number
+  status: number
+}
+export interface Param {}
+export interface UserInfoResponseType extends responseType {
+  data: UserType
+}
+

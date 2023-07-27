@@ -5,6 +5,7 @@ import type {
   orderInfoResponseType,
   qrCodeResponseType,
   payResponseType,
+  UserInfoResponseType,
 } from "./type.ts";
 
 enum API {
@@ -13,6 +14,12 @@ enum API {
   CANCEL_URL = "/order/orderInfo/auth/cancelOrder/", // 取消预约
   QRCODE_URL = "/order/weixin/createNative/", // 获取订单二维码
   PAY_URL = "/order/weixin/queryPayStatus/", // 支付
+  USERINFO_URL = '/user/auth/getUserInfo/', // 获取用户信息
+}
+
+// 获取用户信息
+export const getUserInfoApi = () => {
+  return http.get<any, UserInfoResponseType>(API.USERINFO_URL)
 }
 
 // 支付
