@@ -1,3 +1,4 @@
+import { getCertifiteTypeApi } from './index';
 interface responseType {
   code: number;
   message: string;
@@ -77,3 +78,21 @@ export interface UserInfoResponseType extends responseType {
   data: UserType
 }
 
+
+// 证件对象类型
+export interface CertifiteItemType {
+  id: number
+  createTime: string
+  updateTime: string
+  isDeleted: number
+  param: Param
+  parentId: number
+  name: string
+  value: string
+  dictCode: string
+  hasChildren: boolean
+}
+export interface Param {}
+export interface CertifiteResponseType extends responseType {
+  data: CertifiteItemType[]
+}

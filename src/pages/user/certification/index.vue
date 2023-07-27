@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { InfoFilled } from "@element-plus/icons-vue";
-import { getUserInfoApi } from '@/apis/user/index.ts'
-import type { UserInfoResponseType, UserType } from '@/apis/user/type.ts'
+import { getUserInfoApi, getCertifiteTypeApi, userCertitionApi } from '@/apis/user/index.ts'
+import type { UserInfoResponseType, UserType, CertifiteResponseType, CertifiteItemType } from '@/apis/user/type.ts'
+import { ElMessage } from "element-plus";
 
 const fileList = ref([]);
 
@@ -16,7 +17,31 @@ const getUserInfoFn = async () => {
   }
 }
 
-onMounted(() => getUserInfoFn())
+// 获取身份类型
+const certitionList = ref<CertifiteItemType[]>([])
+const getCertifiteTypeFn = async () => {
+  const res: CertifiteResponseType = await getCertifiteTypeApi()
+  console.log(res);
+  if(res.code === 200) {
+    certitionList.value = res.data
+  }
+}
+
+onMounted(() => {
+  getUserInfoFn()
+  getCertifiteTypeFn()
+})
+
+
+// 点击提交按钮
+const onCerttionFn = async () => {
+  const res = await userCertitionApi(userInfo.value)
+  console.log(res);
+  if(res.code === 200) {
+    ElMessage.success('认证成功')
+    getUserInfoFn()
+  }
+}
 </script>
 
 <template>
@@ -34,7 +59,7 @@ onMounted(() => getUserInfoFn())
 
     <!-- 认证成功的信息 -->
     <el-descriptions
-      v-if="true"
+      v-if="userInfo.authStatus !== 0"
       :column="1"
       border
       style="margin: 25px 0"
@@ -51,18 +76,17 @@ onMounted(() => getUserInfoFn())
       >
     </el-descriptions>
 
-    <el-form v-else style="margin: 30px auto; width: 60%" label-width="100">
+    <el-form :model="userInfo" v-else style="margin: 30px auto; width: 60%" label-width="100">
       <el-form-item label="用户姓名">
-        <el-input placeholder="请输入用户姓名"></el-input>
+        <el-input v-model="userInfo.name" placeholder="请输入用户姓名"></el-input>
       </el-form-item>
       <el-form-item label="证件类型">
-        <el-select style="width: 100%" placeholder="请选择证件类型">
-          <el-option>户口本</el-option>
-          <el-option>身份证</el-option>
+        <el-select v-model="userInfo.certificatesType" style="width: 100%" placeholder="请选择证件类型">
+          <el-option v-for="item in certitionList" :key="item.id" :value="item.value">{{ item.name }}</el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="证件号码">
-        <el-input placeholder="请输入证件号码"></el-input>
+        <el-input v-model="userInfo.certificatesNo" placeholder="请输入证件号码"></el-input>
       </el-form-item>
       <el-form-item label="证件上传">
         <el-upload
@@ -78,7 +102,7 @@ onMounted(() => getUserInfoFn())
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="onCerttionFn">提交</el-button>
         <el-button>重写</el-button>
       </el-form-item>
     </el-form>
