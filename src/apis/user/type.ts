@@ -94,3 +94,47 @@ export interface Param {}
 export interface CertifiteResponseType extends responseType {
   data: CertifiteItemType[];
 }
+
+// 订单列表接口类型
+export interface OrderItemType {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: Param;
+  userId: number;
+  outTradeNo: string;
+  hoscode: string;
+  hosname: string;
+  depcode: string;
+  depname: string;
+  scheduleId: any;
+  title: string;
+  reserveDate: string;
+  reserveTime: number;
+  patientId: number;
+  patientName: string;
+  patientPhone: string;
+  hosRecordId: string;
+  number: number;
+  fetchTime: string;
+  fetchAddress: string;
+  amount: number;
+  quitTime: string;
+  orderStatus: number;
+}
+export interface Param {
+  orderStatusString: string;
+}
+export interface OrderListResponseType extends responseType {
+  data: {
+    searchCount: boolean;
+    size: number;
+    total: number;
+    records: OrderItemType[];
+    current: number;
+    hitCount: boolean;
+    orders: any;
+    pages: number;
+  };
+}

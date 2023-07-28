@@ -7,6 +7,7 @@ import type {
   payResponseType,
   UserInfoResponseType,
   CertifiteResponseType,
+  OrderListResponseType,
 } from "./type.ts";
 
 enum API {
@@ -18,7 +19,21 @@ enum API {
   USERINFO_URL = "/user/auth/getUserInfo/", // 获取用户信息
   CERTIFITETYPE_URL = "/cmn/dict/findByDictCode/", // 获取身份证选项
   USERRENZHEN_URL = "/user/auth/userAuah", // 用户认证
+  USERORDERLIST_URL = "/order/orderInfo/auth/", // 获取挂号订单列表
 }
+
+// 获取挂号订单列表
+export const getUserOrderListApi = (
+  page: number,
+  limit: number,
+  patientId: string,
+  orderStatus: string
+) => {
+  return http.get<any, OrderListResponseType>(
+    API.USERORDERLIST_URL +
+      `${page}/${limit}?patientId=${patientId}&orderStatus=${orderStatus}`
+  );
+};
 
 // 用户认证
 export const userCertitionApi = (data: any) => {

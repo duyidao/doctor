@@ -2,16 +2,16 @@
 import { Edit } from "@element-plus/icons-vue";
 
 defineProps<{
-  item: any,
-  hasChose: boolean
-}>()
+  item: any;
+  hasChose: boolean;
+}>();
 </script>
 
 <template>
   <div class="visitor">
     <div class="top">
       <div class="left">
-        <div class="free">{{ item.isInsure === 1 ? '医保' : '自费' }}</div>
+        <div class="free">{{ item.isInsure === 1 ? "医保" : "自费" }}</div>
         <div class="username">{{ item.name }}</div>
       </div>
       <div class="right">
@@ -19,13 +19,23 @@ defineProps<{
       </div>
     </div>
     <div class="bottom">
-      <div class="bottom-item">证件号码：{{ item.param.certificatesTypeString }}</div>
+      <div class="bottom-item">
+        证件号码：{{ item.param.certificatesTypeString }}
+      </div>
       <div class="bottom-item">证件类型：{{ item.certificatesNo }}</div>
-      <div class="bottom-item">用户性别：{{ item.sex === 1 ? '男' : '女' }}</div>
+      <div class="bottom-item">
+        用户性别：{{ item.sex === 1 ? "男" : "女" }}
+      </div>
       <div class="bottom-item">出生日期：{{ item.birthdate }}</div>
       <div class="bottom-item">手机号码：{{ item.phone }}</div>
-      <div class="bottom-item">婚姻状况：{{ item.isMarry === 0 ? '未婚' : '已婚' }}</div>
-      <div class="bottom-item">当前住处：{{ item.param.provinceString }}/{{ item.param.cityString }}/{{ item.param.regionString }}</div>
+      <div class="bottom-item">
+        婚姻状况：{{ item.isMarry === 0 ? "未婚" : "已婚" }}
+      </div>
+      <div class="bottom-item">
+        当前住处：{{ item.param.provinceString }}/{{ item.param.cityString }}/{{
+          item.param.regionString
+        }}
+      </div>
       <div class="bottom-item">详细地址：{{ item.param.fullAddress }}</div>
 
       <!-- 已选择 -->
@@ -79,7 +89,7 @@ defineProps<{
       transform: scale(1);
     }
     .chose-enter-active {
-      transition: all .3s;
+      transition: all 0.3s;
     }
     .chose-enter-to {
       transform: scale(1.2);
@@ -89,8 +99,7 @@ defineProps<{
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
-      transform: rotate(45deg);
+      transform: translate(-50%, -50%) rotate(45deg);
       width: 200px;
       height: 200px;
       color: red;
