@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { getUserOrderListApi } from "@/apis/user/index.ts";
-import type { OrderListResponseType, OrderItemType } from "@/apis/user/type.ts";
+import {
+  getUserOrderListApi,
+  getAllUserApi,
+  getAllOrderStatusApi,
+} from "@/apis/user/index.ts";
+import type {
+  OrderListResponseType,
+  OrderItemType,
+  AllUserResponseType,
+  AllUserItemType,
+  OrderStatuResponseType,
+  OrderStatuItemType,
+} from "@/apis/user/type.ts";
 
 const router = useRouter();
 
@@ -39,7 +50,6 @@ const getUserOrderListFn = async () => {
     loading.value = false;
   }
 };
-onMounted(() => getUserOrderListFn());
 
 // 点击详情按钮
 const handleDetileFn = (e: OrderItemType) => {
@@ -49,6 +59,35 @@ const handleDetileFn = (e: OrderItemType) => {
       orderId: e.id,
     },
   });
+};
+
+// 获取就诊人信息和订单状态信息
+const allUserList = ref<AllUserItemType[]>([]);
+const getAllUserFn = async () => {
+  const res: AllUserResponseType = await getAllUserApi();
+  console.log(res);
+  if (res.code === 200) {
+    allUserList.value = res.data;
+  }
+};
+const orderStatusList = ref<OrderStatuItemType[]>([]);
+const getAllOrderStatusFn = async () => {
+  const res: OrderStatuResponseType = await getAllOrderStatusApi();
+  console.log(res);
+  if (res.code === 200) {
+    orderStatusList.value = res.data;
+  }
+};
+
+onMounted(() => {
+  getUserOrderListFn();
+  getAllUserFn();
+  getAllOrderStatusFn();
+});
+
+// 切换
+const onChnageFn = () => {
+  getUserOrderListFn();
 };
 </script>
 
@@ -62,13 +101,33 @@ const handleDetileFn = (e: OrderItemType) => {
       <!-- 用户选择下拉模块 -->
       <el-form inline>
         <el-form-item label="就诊人">
-          <el-select placeholder="请选择就诊人">
-            <el-option label="所有就诊人"></el-option>
+          <el-select
+            v-model="patientId"
+            placeholder="请选择就诊人"
+            @change="onChnageFn"
+          >
+            <el-option label="所有就诊人" value=""></el-option>
+            <el-option
+              v-for="item in allUserList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="订单状态">
-          <el-select placeholder="请选择订单状态">
-            <el-option label="所有订单状态"></el-option>
+          <el-select
+            v-model="orderStatus"
+            placeholder="请选择订单状态"
+            @change="onChnageFn"
+          >
+            <el-option label="所有订单状态" value=""></el-option>
+            <el-option
+              v-for="item in orderStatusList"
+              :key="item.status"
+              :label="item.comment"
+              :value="item.status"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>

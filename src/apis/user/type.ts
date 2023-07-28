@@ -1,4 +1,3 @@
-import { getCertifiteTypeApi } from "./index";
 interface responseType {
   code: number;
   message: string;
@@ -61,7 +60,7 @@ export interface UserType {
   createTime?: string;
   updateTime?: string;
   isDeleted?: number;
-  param?: Param;
+  param?: UserTypeParam;
   openid?: any;
   nickName?: any;
   phone?: string;
@@ -72,7 +71,7 @@ export interface UserType {
   authStatus?: number;
   status?: number;
 }
-export interface Param {}
+export interface UserTypeParam {}
 export interface UserInfoResponseType extends responseType {
   data: UserType;
 }
@@ -83,14 +82,14 @@ export interface CertifiteItemType {
   createTime: string;
   updateTime: string;
   isDeleted: number;
-  param: Param;
+  param: CertifiteItemTypeParam;
   parentId: number;
   name: string;
   value: string;
   dictCode: string;
   hasChildren: boolean;
 }
-export interface Param {}
+export interface CertifiteItemTypeParam {}
 export interface CertifiteResponseType extends responseType {
   data: CertifiteItemType[];
 }
@@ -101,7 +100,7 @@ export interface OrderItemType {
   createTime: string;
   updateTime: string;
   isDeleted: number;
-  param: Param;
+  param: OrderItemTypeParam;
   userId: number;
   outTradeNo: string;
   hoscode: string;
@@ -123,7 +122,7 @@ export interface OrderItemType {
   quitTime: string;
   orderStatus: number;
 }
-export interface Param {
+export interface OrderItemTypeParam {
   orderStatusString: string;
 }
 export interface OrderListResponseType extends responseType {
@@ -137,4 +136,52 @@ export interface OrderListResponseType extends responseType {
     orders: any;
     pages: number;
   };
+}
+
+// 全部用户信息类型
+export interface AllUserItemType {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: AllUserItemTypeParam;
+  userId: number;
+  name: string;
+  certificatesType: string;
+  certificatesNo: string;
+  sex: number;
+  birthdate: string;
+  phone: string;
+  isMarry: number;
+  provinceCode: string;
+  cityCode: string;
+  districtCode: string;
+  address: string;
+  contactsName: string;
+  contactsCertificatesType: string;
+  contactsCertificatesNo: string;
+  contactsPhone: string;
+  isInsure: number;
+  cardNo: any;
+  status: string;
+}
+export interface AllUserItemTypeParam {
+  certificatesTypeString: string;
+  contactsCertificatesTypeString: string;
+  cityString: string;
+  fullAddress: string;
+  districtString: string;
+  provinceString: string;
+}
+export interface AllUserResponseType extends responseType {
+  data: AllUserItemType[];
+}
+
+// 订单状态类型
+export interface OrderStatuItemType {
+  comment: string;
+  status: number;
+}
+export interface OrderStatuResponseType extends responseType {
+  data: OrderStatuItemType[];
 }

@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { Edit } from "@element-plus/icons-vue";
+import { Edit, Delete } from "@element-plus/icons-vue";
 
 defineProps<{
   item: any;
-  hasChose: boolean;
+  hasChose?: boolean;
+  hasDelete?: boolean;
 }>();
+
+const emit = defineEmits(["onEdit"]);
+
+const onEditFn = (item: any) => {
+  emit("onEdit", item);
+};
 </script>
 
 <template>
@@ -15,7 +22,13 @@ defineProps<{
         <div class="username">{{ item.name }}</div>
       </div>
       <div class="right">
-        <el-button type="primary" :icon="Edit" circle></el-button>
+        <el-button
+          type="primary"
+          :icon="Edit"
+          circle
+          @click="onEditFn(item)"
+        ></el-button>
+        <el-button type="danger" :icon="Delete" circle></el-button>
       </div>
     </div>
     <div class="bottom">

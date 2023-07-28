@@ -8,6 +8,8 @@ import type {
   UserInfoResponseType,
   CertifiteResponseType,
   OrderListResponseType,
+  AllUserResponseType,
+  OrderStatuResponseType,
 } from "./type.ts";
 
 enum API {
@@ -20,7 +22,19 @@ enum API {
   CERTIFITETYPE_URL = "/cmn/dict/findByDictCode/", // 获取身份证选项
   USERRENZHEN_URL = "/user/auth/userAuah", // 用户认证
   USERORDERLIST_URL = "/order/orderInfo/auth/", // 获取挂号订单列表
+  USERALL_URL = "/user/patient/auth/findAll", // 获取就诊人信息
+  ORDERSTATUS_URL = "/order/orderInfo/auth/getStatusList", // 获取订单状态
 }
+
+// 获取就诊人信息
+export const getAllUserApi = () => {
+  return http.get<any, AllUserResponseType>(API.USERALL_URL);
+};
+
+// 获取订单状态
+export const getAllOrderStatusApi = () => {
+  return http.get<any, OrderStatuResponseType>(API.ORDERSTATUS_URL);
+};
 
 // 获取挂号订单列表
 export const getUserOrderListApi = (
