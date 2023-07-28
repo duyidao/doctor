@@ -55,11 +55,13 @@ const formRules = ref({
 
 // 用户信息获取
 const userInfo = ref<UserType>({});
+const loading = ref<boolean>(false);
 const getUserInfoFn = async () => {
+  loading.value = true;
   const res: UserInfoResponseType = await getUserInfoApi();
-  console.log(res);
   if (res.code === 200) {
     userInfo.value = res.data;
+    loading.value = false;
   }
 };
 
@@ -67,7 +69,6 @@ const getUserInfoFn = async () => {
 const certitionList = ref<CertifiteItemType[]>([]);
 const getCertifiteTypeFn = async () => {
   const res: CertifiteResponseType = await getCertifiteTypeApi();
-  console.log(res);
   if (res.code === 200) {
     certitionList.value = res.data;
   }
@@ -84,7 +85,6 @@ const onCerttionFn = (formRef: any) => {
   formRef.validate(async (valid: boolean, fields: any) => {
     if (valid) {
       const res = await userCertitionApi(userInfo.value);
-      console.log(res);
       if (res.code === 200) {
         ElMessage.success("认证成功");
         getUserInfoFn();
@@ -127,7 +127,7 @@ const onResetFn = () => {
 </script>
 
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <template #header>
       <div>实名信息</div>
     </template>
@@ -162,7 +162,7 @@ const onResetFn = () => {
       :model="userInfo"
       :rules="formRules"
       ref="formRef"
-      v-else
+      v-if="userInfo.authStatus === 0"
       style="margin: 30px auto; width: 60%"
       label-width="100"
     >
