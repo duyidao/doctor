@@ -16,6 +16,43 @@ import { ElMessage } from "element-plus";
 
 const fileList = ref([]);
 
+// 表单校验规则
+const formRef = ref<any>(null);
+const validatorName = (_rule: any, value: string, callback: any) => {
+  if (/^[\u4e00-\u9fa5]{1,}$/.test(value)) {
+    callback();
+  } else {
+    callback(new Error("请输入正确的中国人姓名"));
+  }
+};
+const validatorCertNo = (_rule: any, value: string, callback: any) => {
+  if (
+    /^(1[1-5]|2[1-3]|3[1-7]|4[1-6]|5[0-4]|6[1-5]|71|8[1-2])\d{4}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|1\d|2\d|3[01])\d{3}[\dXx]$/.test(
+      value
+    )
+  ) {
+    callback();
+  } else {
+    callback(new Error("请输入正确的身份证号"));
+  }
+};
+const formRules = ref({
+  name: [
+    { required: true, message: "姓名必填", trigger: ["change", "blur"] },
+    { validator: validatorName, trigger: ["change", "blur"] },
+  ],
+  certificatesNo: [
+    { required: true, message: "身份证号必填", trigger: ["change", "blur"] },
+    { validator: validatorCertNo, trigger: ["change", "blur"] },
+  ],
+  certificatesUrl: [
+    { required: true, message: "证件照必须上传", trigger: ["change", "blur"] },
+  ],
+  certificatesType: [
+    { required: true, message: "身份类型必选", trigger: ["change", "blur"] },
+  ],
+});
+
 // 用户信息获取
 const userInfo = ref<UserType>({});
 const getUserInfoFn = async () => {
@@ -42,15 +79,22 @@ onMounted(() => {
 });
 
 // 点击提交按钮
-const onCerttionFn = async () => {
-  const res = await userCertitionApi(userInfo.value);
-  console.log(res);
-  if (res.code === 200) {
-    ElMessage.success("认证成功");
-    getUserInfoFn();
-  } else {
-    ElMessage.error(res.message);
-  }
+const onCerttionFn = (formRef: any) => {
+  if (!formRef) return;
+  formRef.validate(async (valid: boolean, fields: any) => {
+    if (valid) {
+      const res = await userCertitionApi(userInfo.value);
+      console.log(res);
+      if (res.code === 200) {
+        ElMessage.success("认证成功");
+        getUserInfoFn();
+      } else {
+        ElMessage.error(res.message);
+      }
+    } else {
+      ElMessage.error(fields[Object.keys(fields)[0]][0].message);
+    }
+  });
 };
 
 // 照片墙超出数量
@@ -97,7 +141,7 @@ const onResetFn = () => {
 
     <!-- 认证成功的信息 -->
     <el-descriptions
-      v-if="userInfo.authStatus !== 0"
+      v-if="userInfo.authStatus === 1"
       :column="1"
       border
       style="margin: 25px 0"
@@ -116,17 +160,19 @@ const onResetFn = () => {
 
     <el-form
       :model="userInfo"
+      :rules="formRules"
+      ref="formRef"
       v-else
       style="margin: 30px auto; width: 60%"
       label-width="100"
     >
-      <el-form-item label="用户姓名">
+      <el-form-item label="用户姓名" prop="name">
         <el-input
           v-model="userInfo.name"
           placeholder="请输入用户姓名"
         ></el-input>
       </el-form-item>
-      <el-form-item label="证件类型">
+      <el-form-item label="证件类型" prop="certificatesType">
         <el-select
           v-model="userInfo.certificatesType"
           style="width: 100%"
@@ -140,13 +186,13 @@ const onResetFn = () => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="证件号码">
+      <el-form-item label="证件号码" prop="certificatesNo">
         <el-input
           v-model="userInfo.certificatesNo"
           placeholder="请输入证件号码"
         ></el-input>
       </el-form-item>
-      <el-form-item label="证件上传">
+      <el-form-item label="证件上传" prop="certificatesUrl">
         <el-upload
           ref="uploadRef"
           v-model:file-list="fileList"
@@ -166,7 +212,9 @@ const onResetFn = () => {
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onCerttionFn">提交</el-button>
+        <el-button type="primary" @click="onCerttionFn(formRef)"
+          >提交</el-button
+        >
         <el-button @click="onResetFn">重写</el-button>
       </el-form-item>
     </el-form>
