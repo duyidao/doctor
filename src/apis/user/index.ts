@@ -15,25 +15,27 @@ enum API {
   CANCEL_URL = "/order/orderInfo/auth/cancelOrder/", // 取消预约
   QRCODE_URL = "/order/weixin/createNative/", // 获取订单二维码
   PAY_URL = "/order/weixin/queryPayStatus/", // 支付
-  USERINFO_URL = '/user/auth/getUserInfo/', // 获取用户信息
-  CERTIFITETYPE_URL = '/cmn/dict/findByDictCode/', // 获取身份证选项
-  USERRENZHEN_URL = '/user/auth/userAuth', // 用户认证
+  USERINFO_URL = "/user/auth/getUserInfo/", // 获取用户信息
+  CERTIFITETYPE_URL = "/cmn/dict/findByDictCode/", // 获取身份证选项
+  USERRENZHEN_URL = "/user/auth/userAuah", // 用户认证
 }
 
 // 用户认证
 export const userCertitionApi = (data: any) => {
-  return http.post<any, any>(API.USERRENZHEN_URL, data)
-}
+  return http.post<any, any>(API.USERRENZHEN_URL, data);
+};
 
 // 获取身份证选项
-export const getCertifiteTypeApi = (CertificatesType = 'CertificatesType') => {
-  return http.get<any, CertifiteResponseType>(API.CERTIFITETYPE_URL + CertificatesType)
-}
+export const getCertifiteTypeApi = (CertificatesType = "CertificatesType") => {
+  return http.get<any, CertifiteResponseType>(
+    API.CERTIFITETYPE_URL + CertificatesType
+  );
+};
 
 // 获取用户信息
 export const getUserInfoApi = () => {
-  return http.get<any, UserInfoResponseType>(API.USERINFO_URL)
-}
+  return http.get<any, UserInfoResponseType>(API.USERINFO_URL);
+};
 
 // 支付
 export const payApi = (id: string) => {

@@ -1,4 +1,4 @@
-import { getCertifiteTypeApi } from './index';
+import { getCertifiteTypeApi } from "./index";
 interface responseType {
   code: number;
   message: string;
@@ -55,44 +55,42 @@ export interface payResponseType extends responseType {
   data: boolean;
 }
 
-
 // 用户信息接口类型
 export interface UserType {
-  id: number
-  createTime: string
-  updateTime: string
-  isDeleted: number
-  param: Param
-  openid: any
-  nickName: any
-  phone: string
-  name: string
-  certificatesType: any
-  certificatesNo: any
-  certificatesUrl: any
-  authStatus: number
-  status: number
+  id?: number;
+  createTime?: string;
+  updateTime?: string;
+  isDeleted?: number;
+  param?: Param;
+  openid?: any;
+  nickName?: any;
+  phone?: string;
+  name?: string;
+  certificatesType?: any;
+  certificatesNo?: any;
+  certificatesUrl?: any;
+  authStatus?: number;
+  status?: number;
 }
 export interface Param {}
 export interface UserInfoResponseType extends responseType {
-  data: UserType
+  data: UserType;
 }
-
 
 // 证件对象类型
 export interface CertifiteItemType {
-  id: number
-  createTime: string
-  updateTime: string
-  isDeleted: number
-  param: Param
-  parentId: number
-  name: string
-  value: string
-  dictCode: string
-  hasChildren: boolean
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: Param;
+  parentId: number;
+  name: string;
+  value: string;
+  dictCode: string;
+  hasChildren: boolean;
 }
 export interface Param {}
 export interface CertifiteResponseType extends responseType {
-  data: CertifiteItemType[]
+  data: CertifiteItemType[];
 }
