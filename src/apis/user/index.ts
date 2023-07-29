@@ -24,7 +24,13 @@ enum API {
   USERORDERLIST_URL = "/order/orderInfo/auth/", // 获取挂号订单列表
   USERALL_URL = "/user/patient/auth/findAll", // 获取就诊人信息
   ORDERSTATUS_URL = "/order/orderInfo/auth/getStatusList", // 获取订单状态
+  CITY_URL = "/cmn/dict/findByParentId/", // 获取城市数据
 }
+
+// 获取城市数据
+export const getCityApi = (id: string) => {
+  return http.get<any, any>(API.CITY_URL + id);
+};
 
 // 获取就诊人信息
 export const getAllUserApi = () => {

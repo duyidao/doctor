@@ -2,12 +2,13 @@
 import { ref, onMounted } from "vue";
 import { User } from "@element-plus/icons-vue";
 import { findAllUserApi } from "@/apis/hospital/index.ts";
-import { getCertifiteTypeApi } from "@/apis/user/index.ts";
+import { getCertifiteTypeApi, getCityApi } from "@/apis/user/index.ts";
 import type {
   CertifiteResponseType,
   CertifiteItemType,
 } from "@/apis/user/type.ts";
 import Visitor from "@/pages/hospital/register/components/visitor.vue";
+import type { CascaderProps } from "element-plus";
 
 // 获取就诊人信息与医生信息
 const userList = ref<any[]>([]);
@@ -26,6 +27,27 @@ const getCertifiteTypeFn = async () => {
   if (res.code === 200) {
     certifiteTypeList.value = res.data;
   }
+};
+
+// 获取城市数据
+const props: CascaderProps = {
+  lazy: true,
+  async lazyLoad(node: any, resolve: any) {
+    const res = await getCityApi(node.data.id || "86");
+    let showData = [];
+    if (res.data === 200) {
+      // 整理数据
+      showData = res.data.map((item: any) => ({
+        id: item.id,
+        label: item.name,
+        value: item.value,
+        leaf: !item.hasChildren,
+      }));
+    }
+
+    // 注入数据
+    resolve(showData);
+  },
 };
 
 onMounted(() => {
@@ -126,7 +148,7 @@ const onClickBtnFn = (e: any = {}) => {
           </el-radio-group>
         </el-form-item>
         <el-form-item label="当前住址">
-          <el-cascader />
+          <el-cascader :props="props" />
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input placeholder="请输入详细地址"></el-input>
