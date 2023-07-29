@@ -28,7 +28,12 @@ const onEditFn = (item: any) => {
           circle
           @click="onEditFn(item)"
         ></el-button>
-        <el-button type="danger" :icon="Delete" circle></el-button>
+        <el-button
+          v-if="hasDelete"
+          type="danger"
+          :icon="Delete"
+          circle
+        ></el-button>
       </div>
     </div>
     <div class="bottom">

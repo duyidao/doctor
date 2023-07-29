@@ -25,6 +25,15 @@ const userList = ref<any[]>([]);
 const getUserListFn = async () => {
   const res = await findAllUserApi();
   userList.value = res.data;
+
+  // 如果是从挂号模块跳转过来，则说明会携带id和type
+  if (route.query.type === "chnagePage" && route.query.id) {
+    showForm.value = true;
+
+    let user = userList.value.find((item: any) => item.id == route.query.id);
+
+    if (user) userData.value = user;
+  }
 };
 
 const choseUserIndex = ref<number>(-1);
@@ -64,7 +73,7 @@ onMounted(() => {
   getCertifiteTypeFn();
 
   // 判断从哪个页面来的
-  if (route.query.type === "add") showForm.value = true;
+  if (route.query.type === "chnagePage") showForm.value = true;
 });
 
 const changeUserFn = (i: number) => {
@@ -95,7 +104,7 @@ const onSubmitFn = async () => {
   // 是否成功
   if (res.code === 200) {
     // 从别的页面过来的，返回回去
-    if (route.query.type === "add") {
+    if (route.query.type === "chnagePage") {
       router.back();
     } else {
       ElMessage.success("就诊人操作成功");

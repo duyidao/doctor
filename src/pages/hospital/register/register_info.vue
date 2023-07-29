@@ -64,11 +64,12 @@ const getOrderFn = async () => {
 };
 
 // 点击添加就诊人按钮
-const onClickBtnFn = () => {
+const onClickBtnFn = (e: any = {}) => {
   router.push({
     path: "/doctor/user/patient",
     query: {
-      type: "add",
+      type: "chnagePage",
+      id: e.id || "",
     },
   });
 };
@@ -103,6 +104,7 @@ const onClickBtnFn = () => {
             :item="item"
             :hasChose="choseUserIndex === index"
             @click="changeUserFn(index)"
+            @onEdit="onClickBtnFn"
           />
         </template>
       </div>
