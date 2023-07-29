@@ -62,6 +62,16 @@ const getOrderFn = async () => {
     ElMessage.error(res.message);
   }
 };
+
+// 点击添加就诊人按钮
+const onClickBtnFn = () => {
+  router.push({
+    path: "/doctor/user/patient",
+    query: {
+      type: "add",
+    },
+  });
+};
 </script>
 
 <template>
@@ -73,7 +83,9 @@ const getOrderFn = async () => {
       <template #header>
         <div class="card-header">
           <span>请选择就诊人</span>
-          <el-button :icon="User" type="primary">添加就诊人</el-button>
+          <el-button :icon="User" type="primary" @click="onClickBtnFn"
+            >添加就诊人</el-button
+          >
         </div>
       </template>
       <!-- 就诊人信息 -->

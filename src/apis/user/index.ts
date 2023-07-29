@@ -10,6 +10,7 @@ import type {
   OrderListResponseType,
   AllUserResponseType,
   OrderStatuResponseType,
+  AddUpdateDataType,
 } from "./type.ts";
 
 enum API {
@@ -25,7 +26,19 @@ enum API {
   USERALL_URL = "/user/patient/auth/findAll", // 获取就诊人信息
   ORDERSTATUS_URL = "/order/orderInfo/auth/getStatusList", // 获取订单状态
   CITY_URL = "/cmn/dict/findByParentId/", // 获取城市数据
+  ADDUSER_URL = "/user/patient/auth/save", // 新增就诊人
+  UPDATEUSER_URL = "/user/patient/auth/update", // 编辑就诊人
 }
+
+// 新增就诊人
+export const addUserApi = (data: AddUpdateDataType) => {
+  return http.post<any, any>(API.ADDUSER_URL, data);
+};
+
+// 编辑就诊人
+export const updateUserApi = (data: AddUpdateDataType) => {
+  return http.put<any, any>(API.UPDATEUSER_URL, data);
+};
 
 // 获取城市数据
 export const getCityApi = (id: string) => {

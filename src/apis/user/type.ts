@@ -185,3 +185,22 @@ export interface OrderStatuItemType {
 export interface OrderStatuResponseType extends responseType {
   data: OrderStatuItemType[];
 }
+
+// 就诊人新增编辑数据类型
+export interface AddUpdateDataType {
+  id?: number | string;
+  address: string;
+  name: string;
+  birthdate: string;
+  certificatesNo: string;
+  certificatesType: string;
+  sex: string | number;
+  phone: string;
+  isMarry: string | number;
+  isInsure: string | number;
+  addressSelected: string[];
+  contactsName: string;
+  contactsPhone: string;
+  contactsCertificatesNo: string;
+  contactsCertificatesType: string;
+}
