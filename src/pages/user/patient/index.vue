@@ -2,6 +2,11 @@
 import { ref, onMounted } from "vue";
 import { User } from "@element-plus/icons-vue";
 import { findAllUserApi } from "@/apis/hospital/index.ts";
+import { getCertifiteTypeApi } from "@/apis/user/index.ts";
+import type {
+  CertifiteResponseType,
+  CertifiteItemType,
+} from "@/apis/user/type.ts";
 import Visitor from "@/pages/hospital/register/components/visitor.vue";
 
 // 获取就诊人信息与医生信息
@@ -13,8 +18,19 @@ const getUserListFn = async () => {
 
 const choseUserIndex = ref<number>(-1);
 
+// 获取证件类型
+const certifiteTypeList = ref<CertifiteItemType[]>([]);
+const getCertifiteTypeFn = async () => {
+  const res: CertifiteResponseType = await getCertifiteTypeApi();
+  console.log(res);
+  if (res.code === 200) {
+    certifiteTypeList.value = res.data;
+  }
+};
+
 onMounted(() => {
   getUserListFn();
+  getCertifiteTypeFn();
 });
 
 const changeUserFn = (i: number) => {
@@ -58,13 +74,18 @@ const onClickBtnFn = (e: any = {}) => {
     <!-- 添加、修改就诊人 -->
     <div class="form" v-else>
       <el-divider content-position="left">就诊人信息</el-divider>
-      <el-form style="margin: 25px 0; width: 80%">
+      <el-form style="margin: 25px auto; width: 80%">
         <el-form-item label="用户姓名">
           <el-input placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="证件类型">
           <el-select placeholder="请选择证件类型" style="width: 100%">
-            <el-option label="户口本"></el-option>
+            <el-option
+              v-for="item in certifiteTypeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="证件号码">
@@ -91,12 +112,51 @@ const onClickBtnFn = (e: any = {}) => {
       <el-divider content-position="left"
         >建档信息（完善后部分医院首次就诊不排队建档）</el-divider
       >
-      <el-form style="margin: 25px 0; width: 80%">
+      <el-form style="margin: 25px auto; width: 80%">
         <el-form-item label="婚姻状况">
           <el-radio-group>
             <el-radio label="1" size="large">已婚</el-radio>
             <el-radio label="0" size="large">未婚</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="自费/医保">
+          <el-radio-group>
+            <el-radio label="1" size="large">自费</el-radio>
+            <el-radio label="0" size="large">医保</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="当前住址">
+          <el-cascader />
+        </el-form-item>
+        <el-form-item label="详细地址">
+          <el-input placeholder="请输入详细地址"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <el-divider content-position="left">联系人信息（选填）</el-divider>
+      <el-form style="margin: 25px auto; width: 80%" label-width="80">
+        <el-form-item label="用户姓名">
+          <el-input placeholder="请输入用户姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="证件类型">
+          <el-select placeholder="请选择证件类型" style="width: 100%">
+            <el-option
+              v-for="item in certifiteTypeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="证件号码">
+          <el-input placeholder="请输入证件号码"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码">
+          <el-input placeholder="请输入手机号码"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary">提交</el-button>
+          <el-button>重置</el-button>
         </el-form-item>
       </el-form>
     </div>
