@@ -8,6 +8,7 @@ import {
   getCityApi,
   addUserApi,
   updateUserApi,
+  removeUserApi,
 } from "@/apis/user/index.ts";
 import type {
   CertifiteResponseType,
@@ -115,6 +116,15 @@ const onSubmitFn = async () => {
     ElMessage.error(res.message);
   }
 };
+
+// 删除就诊人
+const onDeleteFn = async (item: any) => {
+  const res = await removeUserApi(item.id);
+  if (res.code === 200) ElMessage.success("删除成功");
+  else ElMessage.error(res.message);
+
+  getUserListFn();
+};
 </script>
 
 <template>
@@ -145,6 +155,7 @@ const onSubmitFn = async () => {
           hasDelete
           @click="changeUserFn(index)"
           @onEdit="onClickBtnFn"
+          @onDelete="onDeleteFn"
         />
       </template>
     </div>

@@ -7,10 +7,16 @@ defineProps<{
   hasDelete?: boolean;
 }>();
 
-const emit = defineEmits(["onEdit"]);
+const emit = defineEmits(["onEdit", "onDelete"]);
 
+// 点击编辑按钮
 const onEditFn = (item: any) => {
   emit("onEdit", item);
+};
+
+// 点击同意删除
+const confirmFn = (item: any) => {
+  emit("onDelete", item);
 };
 </script>
 
@@ -26,14 +32,21 @@ const onEditFn = (item: any) => {
           type="primary"
           :icon="Edit"
           circle
-          @click="onEditFn(item)"
+          @click.stop="onEditFn(item)"
         ></el-button>
-        <el-button
-          v-if="hasDelete"
-          type="danger"
-          :icon="Delete"
-          circle
-        ></el-button>
+        <el-popconfirm
+          @confirm.stop="confirmFn(item)"
+          title="确定要删除该就诊人么？"
+        >
+          <template #reference>
+            <el-button
+              v-if="hasDelete"
+              type="danger"
+              :icon="Delete"
+              circle
+            ></el-button>
+          </template>
+        </el-popconfirm>
       </div>
     </div>
     <div class="bottom">

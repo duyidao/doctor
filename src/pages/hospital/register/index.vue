@@ -1,40 +1,41 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import useDetailStore from "@/store/modules/hospitalDetail";
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import useUserStore from "@/store/modules/user";
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
 const { dialogVisible, userInfo } = storeToRefs(useUserStore());
 const { hospitalInfo, hospitalDepartmentData } = storeToRefs(useDetailStore());
 
-const activeIndex = ref<number>(0)
+const activeIndex = ref<number>(0);
 
 // 点击科室左侧导航
 const handleNavFn = (i: number) => {
-  activeIndex.value = i
+  activeIndex.value = i;
   // 获取右侧科室h1标题
-  let allH1 = document.querySelectorAll('h1')
+  let allH1 = document.querySelectorAll("h1");
   // 滚动到对应位置
   allH1[i].scrollIntoView({
-    behavior: 'smooth', // 过度动画效果
-    block: 'end'
-  })
-}
+    behavior: "smooth", // 过度动画效果
+    block: "end",
+  });
+};
 
 const handleDepartFn = (depart: any) => {
-  if(!userInfo.value.token) dialogVisible.value = true
-  else router.push({
-    path: '/doctor/hospital/register_step',
-    query: {
-      depcode: depart.depcode,
-      code: route.query.code,
-    }
-  })
-}
+  if (!userInfo.value.token) dialogVisible.value = true;
+  else
+    router.push({
+      path: "/doctor/hospital/register_step",
+      query: {
+        depcode: depart.depcode,
+        code: route.query.code,
+      },
+    });
+};
 </script>
 
 <template>
@@ -63,44 +64,68 @@ const handleDepartFn = (depart: any) => {
 
     <div class="content">
       <div class="left">
-        <img :src="`data:image/jpeg;base64,${hospitalInfo.hospital.logoData}`" alt="">
+        <img
+          :src="`data:image/jpeg;base64,${hospitalInfo.hospital.logoData}`"
+          alt=""
+        />
       </div>
       <div class="right">
         <p>挂号规则</p>
         <div class="time">
-          预约周期：{{ hospitalInfo.bookingRule.cycle }}天  放号时间：{{ hospitalInfo.bookingRule.releaseTime }}  停挂时间：{{ hospitalInfo.bookingRule.stopTime }}
+          预约周期：{{ hospitalInfo.bookingRule.cycle }}天 放号时间：{{
+            hospitalInfo.bookingRule.releaseTime
+          }}
+          停挂时间：{{ hospitalInfo.bookingRule.stopTime }}
         </div>
         <div class="address">
-          具体位置：{{ hospitalInfo.hospital
-.fullAddress }}
+          具体位置：{{ hospitalInfo.hospital.fullAddress }}
         </div>
-        <div class="route">
-          具体路线：{{ hospitalInfo.hospital
-.route }}
-        </div>
+        <div class="route">具体路线：{{ hospitalInfo.hospital.route }}</div>
         <div class="releaseTime">
-          退号时间：就诊前一工作日{{ hospitalInfo.bookingRule.quitTime }}点前取消
+          退号时间：就诊前一工作日{{
+            hospitalInfo.bookingRule.quitTime
+          }}点前取消
         </div>
         <div class="rule">预约挂号规则</div>
-        <div v-for="(item, index) in hospitalInfo.bookingRule.rule" :key="index">
+        <div
+          v-for="(item, index) in hospitalInfo.bookingRule.rule"
+          :key="index"
+        >
           {{ item }}
         </div>
       </div>
     </div>
 
     <!-- 科室 -->
-    <div class="department">
+    <div class="department" v-if="hospitalDepartmentData.length > 0">
       <div class="leftNav">
         <ul>
-          <li :class="{'active': index === activeIndex}" v-for="(item, index) in hospitalDepartmentData" :key="item.depcode" @click="handleNavFn(index)">{{ item.depname }}</li>
+          <li
+            :class="{ active: index === activeIndex }"
+            v-for="(item, index) in hospitalDepartmentData"
+            :key="item.depcode"
+            @click="handleNavFn(index)"
+          >
+            {{ item.depname }}
+          </li>
         </ul>
       </div>
       <div class="rightInfo">
-        <div class="showDepartment" v-for="item in hospitalDepartmentData" :key="item.depcode">
+        <div
+          class="showDepartment"
+          v-for="item in hospitalDepartmentData"
+          :key="item.depcode"
+        >
           <h1>{{ item.depname }}</h1>
           <!-- 小科室 -->
           <ul>
-            <li v-for="depart in item.children" :key="depart.depcode" @click="handleDepartFn(depart)">{{ depart.depname }}</li>
+            <li
+              v-for="depart in item.children"
+              :key="depart.depcode"
+              @click="handleDepartFn(depart)"
+            >
+              {{ depart.depname }}
+            </li>
           </ul>
         </div>
       </div>
@@ -213,6 +238,7 @@ const handleDepartFn = (depart: any) => {
           line-height: 50px;
           background-color: #f1f1f1;
           margin-bottom: 20px;
+          padding-left: 20px;
         }
 
         ul {

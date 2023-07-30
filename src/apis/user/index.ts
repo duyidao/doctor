@@ -28,7 +28,13 @@ enum API {
   CITY_URL = "/cmn/dict/findByParentId/", // 获取城市数据
   ADDUSER_URL = "/user/patient/auth/save", // 新增就诊人
   UPDATEUSER_URL = "/user/patient/auth/update", // 编辑就诊人
+  REMOVEUSER_URL = "/user/patient/auth/remove/", // 删除就诊人
 }
+
+// 删除就诊人
+export const removeUserApi = (id: string) => {
+  return http.delete<any, any>(API.REMOVEUSER_URL + id);
+};
 
 // 新增就诊人
 export const addUserApi = (data: AddUpdateDataType) => {
