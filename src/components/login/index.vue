@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { User, Lock } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import useUserStore from "@/store/modules/user";
@@ -8,6 +9,8 @@ import CountDown from "../count_down/index.vue";
 
 const { dialogVisible } = storeToRefs(useUserStore());
 const { getCodeFn, loginFn } = useUserStore();
+const route = useRoute();
+const router = useRouter();
 
 // 控制显示账号密码还是扫码：0账号密码；1微信扫码
 const scene = ref<number>(0);
@@ -81,13 +84,14 @@ const onLogin = (formRef: any) => {
     if (valid) {
       loginFn(loginParams.value)
         .then((_res: any) => {
-          closeDialogFn()
+          closeDialogFn();
+          if (route.query.redirect) router.push(route.query.redirect as string);
         })
         .catch((err: any) => {
           ElMessage.error(err);
         });
     } else {
-      ElMessage.error('表单校验失败，请重新填写后登录');
+      ElMessage.error("表单校验失败，请重新填写后登录");
     }
   });
 };
@@ -97,11 +101,11 @@ const closeDialogFn = () => {
   // 重置内容与校验
   loginParams.value = {
     phone: "",
-    code: ""
-  }
-  formRef.value.resetFields()
-  dialogVisible.value = false
-}
+    code: "",
+  };
+  formRef.value.resetFields();
+  dialogVisible.value = false;
+};
 </script>
 
 <template>
