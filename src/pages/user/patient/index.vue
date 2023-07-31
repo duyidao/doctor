@@ -125,6 +125,11 @@ const onDeleteFn = async (item: any) => {
 
   getUserListFn();
 };
+
+// 点击重置按钮
+const onResetFn = () => {
+  userData.value = {} as AddUpdateDataType;
+};
 </script>
 
 <template>
@@ -276,7 +281,7 @@ const onDeleteFn = async (item: any) => {
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmitFn">提交</el-button>
-          <el-button @click="userData = {}">重置</el-button>
+          <el-button @click="onResetFn">重置</el-button>
         </el-form-item>
       </el-form>
     </div>

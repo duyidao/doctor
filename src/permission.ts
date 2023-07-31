@@ -38,6 +38,6 @@ router.beforeEach((to, from, next) => {
 });
 
 // 添加相应全局后置首位
-router.afterEach((to, from) => {
+router.afterEach(() => {
   Nprogress.done();
 });

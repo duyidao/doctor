@@ -21,7 +21,7 @@ import QRCode from "qrcode";
 const route = useRoute();
 
 // 获取订单详情
-const orderInfo = ref<orderInfoType>({});
+const orderInfo = ref<orderInfoType>({} as orderInfoType);
 const getOrderInfoFn = async () => {
   const res: orderInfoResponseType = await getOrderInfoApi(
     route.query.orderId as string
