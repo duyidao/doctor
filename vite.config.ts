@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/doctor/',
+  publicPath: '/doctor/',
   plugins: [vue()],
   resolve: {
     alias: {
