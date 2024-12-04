@@ -1,0 +1,1 @@
+import{D as p,g as o,E as r,G as i}from"./index-93eae3cd.js";const D=p("detail",()=>{const a=o({}),n=async e=>{const t=await r(e);t.code===200&&(a.value=t.data)},s=o([]);return{hospitalInfo:a,hospitalDepartmentData:s,getHospDetailFn:n,getHospDepartmentFn:async e=>{const t=await i(e);console.log(t),t.code===200&&(s.value=t.data)}}},{persist:!0});export{D as u};

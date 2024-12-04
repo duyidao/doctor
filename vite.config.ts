@@ -12,6 +12,9 @@ export default defineConfig({
       '@comp': path.resolve(__dirname, 'src/components')
     }
   },
+  build: {
+    outDir: 'docs'
+  },
   server: {
     proxy: {
       '/api': {
